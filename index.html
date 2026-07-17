@@ -1,93 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="ur">
 <head>
-<title>The Medicine Point</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Medicine Point</title>
+    <!-- Google Fonts for Modern English & Beautiful Urdu -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="header">
-    <div class="logo">
-        💊
+    <div class="header-left">
+        <div class="logo">
+            <i class="fa-solid fa-capsules"></i>
+        </div>
+        <div class="brand-details">
+            <h1>The Medicine Point</h1>
+            <p class="urdu-slogan">محسن کے سنگ صحت کے رنگ</p>
+        </div>
     </div>
-    <div>
-        <h1>The Medicine Point</h1>
-        <p>محسن کے سنگ صحت کے رنگ</p>
+    <div class="header-right">
+        <span class="user-profile"><i class="fa-regular fa-user"></i> Admin Panel</span>
     </div>
 </div>
-
 
 <div class="layout">
+    <!-- Sidebar Menu -->
+    <div class="sidebar">
+        <h2>MAIN MENU</h2>
+        <button class="active"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+        <button><i class="fa-solid fa-pills"></i> Medicine Stock</button>
+        <button><i class="fa-solid fa-receipt"></i> New Sale</button>
+        <button><i class="fa-solid fa-box-open"></i> Purchase</button>
+        <button><i class="fa-solid fa-users"></i> Customers</button>
+        <button><i class="fa-solid fa-chart-line"></i> Reports</button>
+    </div>
 
-<div class="sidebar">
+    <!-- Main Content Area -->
+    <div class="content">
+        <div class="content-header">
+            <h2><i class="fa-solid fa-chart-pie" style="color: var(--primary-color);"></i> Dashboard Overview</h2>
+            <p class="date-text">Welcome back, Admin!</p>
+        </div>
 
-<h2>Menu</h2>
+        <!-- Dashboard Stats Cards -->
+        <div class="cards">
+            <div class="card card-blue">
+                <div class="card-icon"><i class="fa-solid fa-pills"></i></div>
+                <div class="card-info">
+                    <h3>Total Medicines</h3>
+                    <h1>1,240</h1>
+                    <p>Available Items</p>
+                </div>
+            </div>
 
-<button>🏠 Dashboard</button>
-<button>💊 Medicine Stock</button>
-<button>🧾 New Sale</button>
-<button>📦 Purchase</button>
-<button>👥 Customers</button>
-<button>📊 Reports</button>
+            <div class="card card-green">
+                <div class="card-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+                <div class="card-info">
+                    <h3>Today's Sale</h3>
+                    <h1>Rs 24,500</h1>
+                    <p>Today's Income</p>
+                </div>
+            </div>
 
+            <div class="card card-red">
+                <div class="card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="card-info">
+                    <h3>Low Stock</h3>
+                    <h1>12</h1>
+                    <p>Need Attention</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Urdu Section -->
+        <div class="welcome-box">
+            <div class="welcome-overlay"></div>
+            <div class="welcome-inner">
+                <h2 class="urdu-title">محسن کے سنگ صحت کے رنگ</h2>
+                <p class="urdu-desc">آپ کے علاقہ کا سب سے اچھا اور سستا میڈیکل سٹور</p>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-
-<div class="content">
-
-<h2>Dashboard</h2>
-
-
-<div class="cards">
-
-<div class="card">
-<h3>💊 Total Medicines</h3>
-<h1>0</h1>
-<p>Available Items</p>
-</div>
-
-
-<div class="card">
-<h3>🧾 Today's Sale</h3>
-<h1>Rs 0</h1>
-<p>Today's Income</p>
-</div>
-
-
-<div class="card">
-<h3>⚠ Low Stock</h3>
-<h1>0</h1>
-<p>Need Attention</p>
-</div>
-
-
-</div>
-
-
-
-<div class="welcome">
-
-<h2>محسن کے سنگ صحت کے رنگ</h2>
-
-<p>
-آپ کے علاقہ کا سب سے اچھا اور سستا میڈیکل سٹور
-</p>
-
-</div>
-
-
-</div>
-
-</div>
-
-
 
 <footer>
-The Medicine Point © 2026
+    <p>The Medicine Point &copy; 2026 | Designed for Excellence</p>
 </footer>
-
 
 </body>
 </html>
