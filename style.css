@@ -1,77 +1,108 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f9f4;
     margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f1f6f4;
+}
+
+
+/* Top Header */
+.topbar {
+    background: #087f5b;
+    color: white;
+    padding: 25px;
     text-align: center;
 }
 
-
-/* Header */
-.header {
-    background: #0b8f4d;
-    color: white;
-    padding: 30px;
-    box-shadow: 0 4px 10px #ccc;
-}
-
-.header h1 {
-    font-size: 38px;
+.topbar h1 {
     margin: 0;
+    font-size: 38px;
 }
 
-.header p {
-    font-size: 20px;
+.topbar p {
+    font-size: 18px;
 }
 
 
-/* Dashboard */
-.dashboard {
+/* Main Layout */
+.container {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 25px;
-    margin: 50px;
+    min-height: 500px;
 }
 
 
-.card {
+/* Sidebar */
+.sidebar {
+    width: 230px;
+    background: #064e3b;
+    padding: 25px 10px;
+}
+
+
+.sidebar button {
+    width: 90%;
+    padding: 15px;
+    margin: 10px;
     background: white;
-    width: 260px;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px #ccc;
-}
-
-
-.card h2 {
-    color: #0b8f4d;
-}
-
-
-.card p {
-    color: #555;
-}
-
-
-button {
-    background: #0b8f4d;
-    color: white;
     border: none;
-    padding: 12px 30px;
-    border-radius: 25px;
+    border-radius: 10px;
     font-size: 16px;
     cursor: pointer;
 }
 
 
-button:hover {
-    background: #066b38;
+.sidebar button:hover {
+    background: #d1fae5;
+}
+
+
+/* Main Area */
+.main {
+    flex: 1;
+    padding: 30px;
+}
+
+
+.cards {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+
+.box {
+    background: white;
+    width: 220px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px #ccc;
+    text-align: center;
+}
+
+
+.box h3 {
+    color: #087f5b;
+}
+
+
+.box p {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+/* Welcome */
+.welcome {
+    background: white;
+    margin-top: 40px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px #ccc;
 }
 
 
 footer {
-    background: #0b8f4d;
+    background: #087f5b;
     color: white;
+    text-align: center;
     padding: 15px;
-    margin-top: 40px;
 }
