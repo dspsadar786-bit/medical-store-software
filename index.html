@@ -1,102 +1,146 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>The Medicine Point</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<div class="header">
-
-    <div class="brand">
-        <span class="logo">💊</span>
-        <div>
-            <h1>The Medicine Point</h1>
-            <p>محسن کے سنگ صحت کے رنگ</p>
-        </div>
-    </div>
-
-</div>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f8f7;
+}
 
 
-<div class="main-container">
+/* Header */
+
+.header {
+    background: #087f5b;
+    color: white;
+    padding: 20px 40px;
+}
 
 
-<div class="sidebar">
-
-<h2>Menu</h2>
-
-<a>🏠 Dashboard</a>
-<a>💊 Medicine Stock</a>
-<a>🧾 New Sale</a>
-<a>📦 Purchase</a>
-<a>👥 Customers</a>
-<a>📊 Reports</a>
-
-</div>
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
 
 
-
-<div class="content">
-
-<h2>Dashboard</h2>
-
-
-<div class="cards">
+.logo {
+    font-size: 45px;
+}
 
 
-<div class="card">
-<h3>💊 Total Medicines</h3>
-<h1>0</h1>
-<p>Total Stock Items</p>
-</div>
+.brand h1 {
+    margin: 0;
+    font-size: 35px;
+}
 
 
-<div class="card">
-<h3>🧾 Today's Sale</h3>
-<h1>Rs 0</h1>
-<p>Today's Revenue</p>
-</div>
-
-
-<div class="card">
-<h3>⚠ Low Stock</h3>
-<h1>0</h1>
-<p>Medicine Alert</p>
-</div>
-
-
-</div>
+.brand p {
+    margin: 5px 0;
+    font-size: 20px;
+}
 
 
 
-<div class="welcome-box">
+/* Main Layout */
 
-<h2>Welcome to The Medicine Point</h2>
-
-<p>
-آپ کے علاقہ کا سب سے اچھا اور سستا میڈیکل سٹور
-</p>
-
-<p>
-ہم معیاری ادویات اور بہترین سہولت فراہم کرتے ہیں۔
-</p>
-
-</div>
+.main-container {
+    display: flex;
+    min-height: 600px;
+}
 
 
 
-</div>
+/* Sidebar */
+
+.sidebar {
+    width: 240px;
+    background: #064e3b;
+    padding: 20px;
+}
 
 
-</div>
+.sidebar h2 {
+    color: white;
+    text-align: center;
+}
 
 
-<footer>
-© 2026 The Medicine Point | Pharmacy Management System
-</footer>
+.sidebar a {
+    display: block;
+    background: white;
+    margin: 12px 0;
+    padding: 15px;
+    border-radius: 10px;
+    color: #064e3b;
+    cursor: pointer;
+    font-size: 16px;
+}
 
 
-</body>
-</html>
+
+/* Content */
+
+.content {
+    flex: 1;
+    padding: 30px;
+}
+
+
+.content h2 {
+    color: #064e3b;
+}
+
+
+
+/* Cards */
+
+.cards {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+
+.card {
+    background: white;
+    width: 230px;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 15px #ccc;
+}
+
+
+.card h3 {
+    color: #087f5b;
+}
+
+
+.card h1 {
+    font-size: 35px;
+}
+
+
+
+/* Welcome */
+
+.welcome-box {
+    margin-top: 40px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px #ccc;
+    text-align: center;
+}
+
+
+.welcome-box h2 {
+    color: #087f5b;
+}
+
+
+
+footer {
+    background: #087f5b;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
