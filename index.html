@@ -3,149 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Medicine Point | Pharmacy Management System</title>
-    <!-- Modern Enterprise Font -->
+    <title>The Medicine Point - Enterprise Desktop v1.0</title>
+    <!-- Premium Desktop UI Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome Pro Icons -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="app-window">
         
-        <!-- Fixed Sidebar -->
+        <!-- SIDEBAR NAVIGATION -->
         <aside class="sidebar">
             <div class="sidebar-brand">
-                <div class="brand-logo"><i class="fa-solid fa-mortar-pestle"></i></div>
+                <div class="brand-logo"><i class="fa-solid fa-house-medical"></i></div>
                 <div class="brand-text">
                     <h1>Medicine Point</h1>
-                    <span class="brand-slogan">Healthcare Solutions</span>
+                    <span class="brand-version">Offline Desktop v1.0</span>
                 </div>
             </div>
 
             <nav class="sidebar-menu">
-                <button class="menu-item active"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
-                <button class="menu-item"><i class="fa-solid fa-pills"></i> Inventory</button>
-                <button class="menu-item"><i class="fa-solid fa-file-invoice-dollar"></i> POS & Sales</button>
-                <button class="menu-item"><i class="fa-solid fa-truck-ramp-box"></i> Purchases</button>
-                <button class="menu-item"><i class="fa-solid fa-user-tie"></i> Customers</button>
-                <button class="menu-item"><i class="fa-solid fa-building-columns"></i> Suppliers</button>
-                <button class="menu-item"><i class="fa-solid fa-chart-column"></i> Analytics</button>
-                <button class="menu-item"><i class="fa-solid fa-gear"></i> Settings</button>
+                <button class="menu-item active"><i class="fa-solid fa-chart-pie"></i> Dashboard <span class="shortcut">F1</span></button>
+                <button class="menu-item"><i class="fa-solid fa-pills"></i> Inventory <span class="shortcut">F2</span></button>
+                <button class="menu-item"><i class="fa-solid fa-cart-shopping"></i> New Sale POS <span class="shortcut">F3</span></button>
+                <button class="menu-item"><i class="fa-solid fa-truck-field"></i> Purchases <span class="shortcut">F4</span></button>
+                <button class="menu-item"><i class="fa-solid fa-users"></i> Customers</button>
+                <button class="menu-item"><i class="fa-solid fa-building-user"></i> Suppliers</button>
+                <button class="menu-item"><i class="fa-solid fa-chart-line"></i> Reports</button>
+                <button class="menu-item"><i class="fa-solid fa-sliders"></i> Settings</button>
             </nav>
 
-            <div class="sidebar-user">
-                <img src="https://ui-avatars.com/api/?name=Admin+User&background=0284c7&color=fff&rounded=true" alt="Admin" class="user-avatar">
-                <div class="user-info">
-                    <span class="user-name">Admin User</span>
-                    <span class="user-role">Administrator</span>
+            <div class="sidebar-status">
+                <div class="status-indicator online"></div>
+                <div class="status-text">
+                    <p class="user-title">System Administrator</p>
+                    <span class="db-status">Database: SQLite Local</span>
                 </div>
-                <button class="logout-btn"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </aside>
 
-        <!-- Main Content Area -->
-        <main class="main-content">
+        <!-- MAIN MAIN SYSTEM VIEW -->
+        <main class="main-viewport">
             
-            <!-- Top Navbar -->
+            <!-- TOP NAVBAR -->
             <header class="top-navbar">
-                <div class="page-header">
-                    <h2>Analytics Dashboard</h2>
-                    <p>Good Morning, Admin! Here’s your performance summary.</p>
+                <div class="nav-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Global Search (Press Ctrl + F)...">
                 </div>
-                <div class="navbar-actions">
-                    <div class="search-bar">
-                        <i class="fa-solid fa-search"></i>
-                        <input type="text" placeholder="Search medicines, bills...">
-                    </div>
-                    <button class="action-btn"><i class="fa-solid fa-bell"></i><span class="notification-badge"></span></button>
-                    <div class="current-date">
-                        <i class="fa-regular fa-calendar-days"></i> <span>Friday, July 17, 2026</span>
+                
+                <div class="nav-right">
+                    <div class="quick-badge danger-badge"><i class="fa-solid fa-triangle-exclamation"></i> 12 Alerts</div>
+                    <div class="system-time">
+                        <i class="fa-regular fa-clock"></i> <span id="clock">17:20 PM</span>
                     </div>
                 </div>
             </header>
 
-            <!-- Scrollable Content Body -->
-            <div class="content-body">
+            <!-- MAIN GRID SYSTEM -->
+            <div class="dashboard-grid">
                 
-                <!-- Main Stats Grid -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon icon-blue">
-                            <i class="fa-solid fa-box-archive"></i>
-                        </div>
-                        <div class="stat-data">
-                            <span class="stat-title">Total SKUs</span>
-                            <h2 class="stat-value">1,240</h2>
-                            <span class="stat-desc">Unique Medicines</span>
+                <!-- TOP 4 METRIC CARDS -->
+                <div class="metrics-row">
+                    <div class="metric-card">
+                        <div class="m-icon bg-blue"><i class="fa-solid fa-boxes-stacked"></i></div>
+                        <div class="m-data">
+                            <span class="m-label">Total Stock Items</span>
+                            <h2 class="m-value">1,240</h2>
+                            <span class="m-subtext">Active SKUs</span>
                         </div>
                     </div>
 
-                    <div class="stat-card">
-                        <div class="stat-icon icon-green">
-                            <i class="fa-solid fa-cash-register"></i>
-                        </div>
-                        <div class="stat-data">
-                            <span class="stat-title">Today's Revenue</span>
-                            <h2 class="stat-value">Rs 24,500</h2>
-                            <span class="stat-desc">+12.5% vs Yesterday</span>
+                    <div class="metric-card">
+                        <div class="m-icon bg-green"><i class="fa-solid fa-cash-register"></i></div>
+                        <div class="m-data">
+                            <span class="m-label">Today's Gross Sales</span>
+                            <h2 class="m-value">Rs 24,500</h2>
+                            <span class="m-subtext">34 Invoices generated</span>
                         </div>
                     </div>
 
-                    <div class="stat-card alert-card">
-                        <div class="stat-icon icon-red">
-                            <i class="fa-solid fa-heart-circle-exclamation"></i>
-                        </div>
-                        <div class="stat-data">
-                            <span class="stat-title">Critical Stock</span>
-                            <h2 class="stat-value">12</h2>
-                            <span class="stat-desc">Needs Immediate Restock</span>
+                    <div class="metric-card alert-border">
+                        <div class="m-icon bg-red"><i class="fa-solid fa-circle-exclamation"></i></div>
+                        <div class="m-data">
+                            <span class="m-label">Low Stock Items</span>
+                            <h2 class="m-value">12</h2>
+                            <span class="m-subtext">Action required</span>
                         </div>
                     </div>
 
-                    <div class="stat-card">
-                        <div class="stat-icon icon-purple">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                        </div>
-                        <div class="stat-data">
-                            <span class="stat-title">Expiring Soon</span>
-                            <h2 class="stat-value">7</h2>
-                            <span class="stat-desc">Within 30 Days</span>
+                    <div class="metric-card warning-border">
+                        <div class="m-icon bg-purple"><i class="fa-solid fa-hourglass-half"></i></div>
+                        <div class="m-data">
+                            <span class="m-label">Near Expiry</span>
+                            <h2 class="m-value">07</h2>
+                            <span class="m-subtext">Within 30 Days</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Secondary Info Section -->
-                <div class="info-grid">
-                    <div class="info-card welcome-banner">
-                        <div class="banner-content">
-                            <h2 class="banner-title">Welcome to Enterprise Edition</h2>
-                            <p class="banner-sub">Your complete pharmacy management, inventory, and sales intelligence system. Streamline operations and enhance patient care efficiently.</p>
-                            <button class="banner-btn">View Reports</button>
+                <!-- MIDDLE ROW: ANALYTICS & QUICK ACTIONS -->
+                <div class="middle-layout">
+                    
+                    <!-- Analytics Graph Placeholder -->
+                    <div class="panel chart-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-chart-column"></i> Sales & Revenue Overview</h3>
+                            <span class="panel-tag">Live Chart</span>
                         </div>
-                        <div class="banner-graphic">
-                            <i class="fa-solid fa-user-md"></i>
+                        <div class="mock-chart">
+                            <!-- Visual Graphic bars representing high-end software look -->
+                            <div class="chart-bar" style="height: 40%"><span>Mon</span></div>
+                            <div class="chart-bar" style="height: 65%"><span>Tue</span></div>
+                            <div class="chart-bar" style="height: 50%"><span>Wed</span></div>
+                            <div class="chart-bar" style="height: 85%"><span>Thu</span></div>
+                            <div class="chart-bar active" style="height: 95%"><span>Today</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Shortcut & Quick Action Console -->
+                    <div class="panel console-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-terminal"></i> Quick Launch Console</h3>
+                        </div>
+                        <div class="console-actions">
+                            <button class="c-btn btn-primary"><i class="fa-solid fa-plus"></i> F3 - New Retail Bill</button>
+                            <button class="c-btn"><i class="fa-solid fa-pills"></i> F2 - Add New Medicine</button>
+                            <button class="c-btn"><i class="fa-solid fa-file-import"></i> Receive Purhcase Order</button>
+                            <button class="c-btn text-danger"><i class="fa-solid fa-power-off"></i> Exit System</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- BOTTOM ROW: SYSTEM DATATABLE -->
+                <div class="panel table-panel">
+                    <div class="panel-header">
+                        <h3><i class="fa-solid fa-list-check"></i> Critical Inventory Stock Alert Log</h3>
+                        <div class="table-actions">
+                            <button class="table-btn"><i class="fa-solid fa-print"></i> Print List</button>
+                            <button class="table-btn"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
                         </div>
                     </div>
                     
-                    <!-- Quick Actions Placeholder -->
-                    <div class="info-card quick-actions">
-                        <h3>Quick Actions</h3>
-                        <div class="action-buttons">
-                            <button><i class="fa-solid fa-plus"></i> New Sale</button>
-                            <button><i class="fa-solid fa-pills"></i> Add Stock</button>
-                            <button><i class="fa-solid fa-file-invoice"></i> Reports</button>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Medicine Name</th>
+                                    <th>Generic Formula</th>
+                                    <th>Rack Location</th>
+                                    <th>Current Qty</th>
+                                    <th>Min Level</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Panadol 500mg (Tablet)</strong></td>
+                                    <td>Paracetamol</td>
+                                    <td>Rack A-3</td>
+                                    <td class="text-danger font-weight-bold">40 Pcs</td>
+                                    <td>200 Pcs</td>
+                                    <td><span class="badge badge-red">Critical Low</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Amoxil 250mg (Capsule)</strong></td>
+                                    <td>Amoxicillin</td>
+                                    <td>Rack B-1</td>
+                                    <td class="text-warning font-weight-bold">15 Pcs</td>
+                                    <td>50 Pcs</td>
+                                    <td><span class="badge badge-yellow">Low Stock</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Augmentin 625mg</strong></td>
+                                    <td>Co-amoxiclav</td>
+                                    <td>Refrigerator</td>
+                                    <td class="text-danger font-weight-bold">02 Pcs</td>
+                                    <td>30 Pcs</td>
+                                    <td><span class="badge badge-red">Out of Stock</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Surbex-Z (Tablets)</strong></td>
+                                    <td>Vitamin B-Complex + Zinc</td>
+                                    <td>Rack D-4</td>
+                                    <td>120 Pcs</td>
+                                    <td>100 Pcs</td>
+                                    <td><span class="badge badge-green">Expiring Soon</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Fixed Footer -->
+            <!-- RUNTIME FOOTER -->
             <footer class="app-footer">
-                <span>The Medicine Point v3.5.2 | Licensed to [Pharmacy Name]</span>
-                <span>Powered by Healthcare Analytics © 2026</span>
+                <div class="footer-left">Terminal ID: TERM-01 | Node: Localhost</div>
+                <div class="footer-right">Database Connected Successfully.</div>
             </footer>
         </main>
     </div>
