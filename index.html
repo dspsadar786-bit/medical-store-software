@@ -1,146 +1,114 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f8f7;
-}
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Medicine Point - Dashboard</title>
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+    <!-- Main Container to prevent screen shifting -->
+    <div class="app-container">
+        
+        <!-- Sidebar Layout Fixed -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">💊</div>
+                <div class="brand-text">
+                    <h1>The Medicine Point</h1>
+                    <span class="urdu-logo-text">محسن کے سنگ صحت کے رنگ</span>
+                </div>
+            </div>
 
-/* Header */
+            <nav class="sidebar-menu">
+                <button class="menu-item active"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+                <button class="menu-item"><i class="fa-solid fa-pills"></i> Medicine Stock</button>
+                <button class="menu-item"><i class="fa-solid fa-receipt"></i> New Sale</button>
+                <button class="menu-item"><i class="fa-solid fa-box"></i> Purchase</button>
+                <button class="menu-item"><i class="fa-solid fa-users"></i> Customers</button>
+                <button class="menu-item"><i class="fa-solid fa-chart-column"></i> Reports</button>
+            </nav>
 
-.header {
-    background: #087f5b;
-    color: white;
-    padding: 20px 40px;
-}
+            <div class="sidebar-footer">
+                <p><i class="fa-regular fa-user"></i> Admin Panel</p>
+            </div>
+        </aside>
 
+        <!-- Main Content Wrapper -->
+        <main class="main-content">
+            
+            <!-- Top Navbar for perfect alignment -->
+            <header class="top-navbar">
+                <div class="page-title">
+                    <h2>Dashboard Overview</h2>
+                    <p>Welcome back to your pharmacy manager</p>
+                </div>
+                <div class="current-date">
+                    <i class="fa-regular fa-calendar-days"></i> <span id="live-date">Live System</span>
+                </div>
+            </header>
 
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
+            <!-- Dashboard Content Grid -->
+            <div class="content-body">
+                
+                <!-- Stats Row -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon icon-blue">
+                            <i class="fa-solid fa-capsules"></i>
+                        </div>
+                        <div class="stat-data">
+                            <span class="stat-title">Total Medicines</span>
+                            <h2 class="stat-value">1,240</h2>
+                            <span class="stat-desc">Available Items</span>
+                        </div>
+                    </div>
 
+                    <div class="stat-card">
+                        <div class="stat-icon icon-green">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <div class="stat-data">
+                            <span class="stat-title">Today's Sale</span>
+                            <h2 class="stat-value">Rs 24,500</h2>
+                            <span class="stat-desc">Today's Income</span>
+                        </div>
+                    </div>
 
-.logo {
-    font-size: 45px;
-}
+                    <div class="stat-card alert-card">
+                        <div class="stat-icon icon-red">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="stat-data">
+                            <span class="stat-title">Low Stock</span>
+                            <h2 class="stat-value">12</h2>
+                            <span class="stat-desc">Need Attention</span>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Featured Professional Urdu Welcome Banner -->
+                <div class="premium-banner">
+                    <div class="banner-overlay"></div>
+                    <div class="banner-content">
+                        <h2 class="banner-urdu-title">محسن کے سنگ صحت کے رنگ</h2>
+                        <p class="banner-urdu-sub">آپ کے علاقہ کا سب سے اچھا اور سستا میڈیکل سٹور</p>
+                    </div>
+                </div>
 
-.brand h1 {
-    margin: 0;
-    font-size: 35px;
-}
+            </div>
 
+            <!-- Footer Fixed At Bottom of Content -->
+            <footer class="app-footer">
+                The Medicine Point &copy; 2026 | Enterprise Edition
+            </footer>
+        </main>
+    </div>
 
-.brand p {
-    margin: 5px 0;
-    font-size: 20px;
-}
-
-
-
-/* Main Layout */
-
-.main-container {
-    display: flex;
-    min-height: 600px;
-}
-
-
-
-/* Sidebar */
-
-.sidebar {
-    width: 240px;
-    background: #064e3b;
-    padding: 20px;
-}
-
-
-.sidebar h2 {
-    color: white;
-    text-align: center;
-}
-
-
-.sidebar a {
-    display: block;
-    background: white;
-    margin: 12px 0;
-    padding: 15px;
-    border-radius: 10px;
-    color: #064e3b;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-
-
-/* Content */
-
-.content {
-    flex: 1;
-    padding: 30px;
-}
-
-
-.content h2 {
-    color: #064e3b;
-}
-
-
-
-/* Cards */
-
-.cards {
-    display: flex;
-    gap: 25px;
-    flex-wrap: wrap;
-}
-
-
-.card {
-    background: white;
-    width: 230px;
-    padding: 25px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 5px 15px #ccc;
-}
-
-
-.card h3 {
-    color: #087f5b;
-}
-
-
-.card h1 {
-    font-size: 35px;
-}
-
-
-
-/* Welcome */
-
-.welcome-box {
-    margin-top: 40px;
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px #ccc;
-    text-align: center;
-}
-
-
-.welcome-box h2 {
-    color: #087f5b;
-}
-
-
-
-footer {
-    background: #087f5b;
-    color: white;
-    text-align: center;
-    padding: 15px;
-}
+</body>
+</html>
