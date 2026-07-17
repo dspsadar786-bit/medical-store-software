@@ -1,108 +1,274 @@
-body {
+/* --- High-End Enterprise Theme Variables --- */
+:root {
+    --bg-main: #f4f6f9;          /* Sleek Light Gray Background */
+    --surface: #ffffff;          /* Pure White for Premium Cards */
+    --text-primary: #1e293b;     /* Sharp Dark Slate */
+    --text-secondary: #64748b;   /* Professional Muted Slate */
+    --brand-color: #0284c7;      /* Clean Clinical Blue */
+    --brand-success: #16a34a;    /* Success Green */
+    --brand-danger: #dc2626;     /* Warning Red */
+    --border-color: #e2e8f0;     /* Soft Divider Line Color */
+    --radius-lg: 12px;
+    --radius-md: 8px;
+    --transition: all 0.25s ease;
+}
+
+/* --- Page Reset & Layout Guard --- */
+* {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f1f6f4;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
 }
 
-
-/* Top Header */
-.topbar {
-    background: #087f5b;
-    color: white;
-    padding: 25px;
-    text-align: center;
+body, html {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    overflow: hidden; /* Prevents whole page from scrolling brokenly */
 }
 
-.topbar h1 {
-    margin: 0;
-    font-size: 38px;
-}
-
-.topbar p {
-    font-size: 18px;
-}
-
-
-/* Main Layout */
-.container {
+/* Wrapper to lock everything into a perfect 2-column layout */
+.app-container {
     display: flex;
-    min-height: 500px;
+    width: 100%;
+    height: 100vh;
 }
 
-
-/* Sidebar */
+/* --- Fixed Premium Sidebar --- */
 .sidebar {
-    width: 230px;
-    background: #064e3b;
-    padding: 25px 10px;
-}
-
-
-.sidebar button {
-    width: 90%;
-    padding: 15px;
-    margin: 10px;
-    background: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-
-.sidebar button:hover {
-    background: #d1fae5;
-}
-
-
-/* Main Area */
-.main {
-    flex: 1;
-    padding: 30px;
-}
-
-
-.cards {
+    width: 280px;
+    background-color: #0f172a; /* Dark Elegant Navy for Premium Contrast */
+    color: #ffffff;
     display: flex;
-    gap: 25px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    border-right: 1px solid rgba(255,255,255,0.05);
 }
 
+.sidebar-brand {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
 
-.box {
-    background: white;
-    width: 220px;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px #ccc;
+.brand-logo {
+    font-size: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border-radius: var(--radius-md);
+}
+
+.brand-text h1 {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.urdu-logo-text {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 11px;
+    color: #38bdf8;
+    display: block;
+    margin-top: 2px;
+}
+
+.sidebar-menu {
+    flex: 1;
+    padding: 20px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.menu-item {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
+}
+
+.menu-item i {
+    width: 20px;
+    font-size: 16px;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+
+.menu-item.active {
+    background: var(--brand-color);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* --- Main Content Viewport Setup --- */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto; /* Content scrolls smoothly inside its container */
+}
+
+/* --- Top Navigation Alignment Bar --- */
+.top-navbar {
+    background: var(--surface);
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-title h2 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.page-title p {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.current-date {
+    background: var(--bg-main);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Grid Body Content --- */
+.content-body {
+    padding: 32px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Grid alignment that dynamically handles screen resizing */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+/* --- Clean Professional Cards --- */
+.stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.03);
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+}
+
+.stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+}
+
+/* Distinct subtle modern coloring instead of old bright blocks */
+.icon-blue { background: #e0f2fe; color: var(--brand-color); }
+.icon-green { background: #dcfce7; color: var(--brand-success); }
+.icon-red { background: #fee2e2; color: var(--brand-danger); }
+
+/* Alert border specifically highlighting crucial attention card */
+.alert-card {
+    border-left: 4px solid var(--brand-danger);
+}
+
+.stat-data .stat-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    display: block;
+}
+
+.stat-data .stat-value {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 4px 0;
+    color: var(--text-primary);
+}
+
+.stat-data .stat-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* --- Premium Centered Urdu Banner --- */
+.premium-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: var(--radius-lg);
+    padding: 50px 32px;
     text-align: center;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
 }
 
-
-.box h3 {
-    color: #087f5b;
+.banner-urdu-title {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 28px;
+    color: #ffffff;
+    line-height: 2.4;
+    margin-bottom: 8px;
 }
 
-
-.box p {
-    font-size: 30px;
-    font-weight: bold;
+.banner-urdu-sub {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 16px;
+    color: #38bdf8;
+    opacity: 0.9;
 }
 
-
-/* Welcome */
-.welcome {
-    background: white;
-    margin-top: 40px;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px #ccc;
-}
-
-
-footer {
-    background: #087f5b;
-    color: white;
+/* --- App Footer Align --- */
+.app-footer {
+    padding: 16px 32px;
+    background: var(--surface);
+    border-top: 1px solid var(--border-color);
     text-align: center;
-    padding: 15px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: auto;
 }
