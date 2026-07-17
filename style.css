@@ -1,24 +1,30 @@
-/* --- High-End Enterprise Theme Variables --- */
+/* --- Ultra-Professional Enterprise Theme --- */
 :root {
-    --bg-main: #f4f6f9;          /* Sleek Light Gray Background */
-    --surface: #ffffff;          /* Pure White for Premium Cards */
-    --text-primary: #1e293b;     /* Sharp Dark Slate */
-    --text-secondary: #64748b;   /* Professional Muted Slate */
-    --brand-color: #0284c7;      /* Clean Clinical Blue */
-    --brand-success: #16a34a;    /* Success Green */
-    --brand-danger: #dc2626;     /* Warning Red */
-    --border-color: #e2e8f0;     /* Soft Divider Line Color */
-    --radius-lg: 12px;
-    --radius-md: 8px;
-    --transition: all 0.25s ease;
+    --bg-main: #f0f4f8;          /* Very Light Professional Gray-Blue */
+    --surface: #ffffff;          /* Pure White */
+    --text-primary: #111827;     /* Intense Dark Slate */
+    --text-secondary: #6b7280;   /* Muted Slate Gray */
+    --brand-color: #0284c7;      /* Precise Clinical Blue */
+    --brand-dark: #075985;       /* Hover Blue */
+    --brand-success: #10b981;    /* Refined Green */
+    --brand-danger: #ef4444;     /* Refined Red */
+    --brand-purple: #8b5cf6;     /* Purple for Expiry Alert */
+    --border-color: #e5e7eb;     /* Clean Separators */
+    --sidebar-bg: #0f172a;       /* Deep Navy Sidebar */
+    --sidebar-active: #1e293b;   /* Slightly Lighter Active */
+    --radius-lg: 16px;
+    --radius-md: 10px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 15px -3px rgba(0,0,0,0.06);
+    --transition: all 0.2s ease-in-out;
 }
 
-/* --- Page Reset & Layout Guard --- */
+/* --- Global Reset --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', sans-serif; /* Clean professional font everywhere */
 }
 
 body, html {
@@ -26,67 +32,74 @@ body, html {
     height: 100vh;
     background-color: var(--bg-main);
     color: var(--text-primary);
-    overflow: hidden; /* Prevents whole page from scrolling brokenly */
+    overflow: hidden; /* Lock viewport */
+    font-size: 14px;
+    line-height: 1.5;
 }
 
-/* Wrapper to lock everything into a perfect 2-column layout */
 .app-container {
     display: flex;
     width: 100%;
     height: 100vh;
 }
 
-/* --- Fixed Premium Sidebar --- */
+/* --- Refined Sidebar --- */
 .sidebar {
-    width: 280px;
-    background-color: #0f172a; /* Dark Elegant Navy for Premium Contrast */
+    width: 270px;
+    background-color: var(--sidebar-bg);
     color: #ffffff;
     display: flex;
     flex-direction: column;
     border-right: 1px solid rgba(255,255,255,0.05);
+    z-index: 10;
 }
 
 .sidebar-brand {
-    padding: 24px;
+    padding: 24px 20px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    gap: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .brand-logo {
     font-size: 24px;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 8px;
+    color: #38bdf8;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
     border-radius: var(--radius-md);
 }
 
 .brand-text h1 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     letter-spacing: -0.5px;
 }
 
-.urdu-logo-text {
-    font-family: 'Noto Nastaliq Urdu', serif;
-    font-size: 11px;
-    color: #38bdf8;
+.brand-slogan {
+    font-size: 12px;
+    color: #94a3b8;
     display: block;
-    margin-top: 2px;
+    margin-top: 1px;
 }
 
 .sidebar-menu {
     flex: 1;
-    padding: 20px 14px;
+    padding: 20px 12px;
     display: flex;
     flex-direction: column;
     gap: 6px;
+    overflow-y: auto; /* Menu can scroll if too long */
+}
+
+.sidebar-menu::-webkit-scrollbar {
+    width: 4px;
 }
 
 .menu-item {
     background: transparent;
     border: none;
-    color: #94a3b8;
+    color: #cbd5e1;
     text-align: left;
     padding: 12px 16px;
     font-size: 14px;
@@ -95,13 +108,14 @@ body, html {
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     transition: var(--transition);
 }
 
 .menu-item i {
     width: 20px;
     font-size: 16px;
+    text-align: center;
 }
 
 .menu-item:hover {
@@ -113,25 +127,60 @@ body, html {
     background: var(--brand-color);
     color: #ffffff;
     font-weight: 600;
+    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
 }
 
-.sidebar-footer {
-    padding: 20px;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    font-size: 13px;
+/* Sidebar User Info */
+.sidebar-user {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    background: var(--sidebar-active);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+}
+
+.user-info .user-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #ffffff;
+    display: block;
+}
+
+.user-info .user-role {
+    font-size: 12px;
     color: #94a3b8;
 }
 
-/* --- Main Content Viewport Setup --- */
+.logout-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: auto;
+    transition: var(--transition);
+}
+
+.logout-btn:hover {
+    color: var(--brand-danger);
+}
+
+/* --- Main Content Section --- */
 .main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
-    overflow-y: auto; /* Content scrolls smoothly inside its container */
+    overflow-y: auto;
 }
 
-/* --- Top Navigation Alignment Bar --- */
+/* --- Advanced Top Navbar --- */
 .top-navbar {
     background: var(--surface);
     padding: 18px 32px;
@@ -139,31 +188,103 @@ body, html {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 5;
 }
 
-.page-title h2 {
-    font-size: 20px;
-    font-weight: 600;
+.page-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
-.page-title p {
+.page-header p {
     font-size: 13px;
     color: var(--text-secondary);
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.search-bar {
+    position: relative;
+    width: 250px;
+}
+
+.search-bar i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px 14px 10px 40px;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 13px;
+    transition: var(--transition);
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--brand-color);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+}
+
+.action-btn {
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 16px;
+    position: relative;
+    transition: var(--transition);
+}
+
+.action-btn:hover {
+    color: var(--brand-color);
+    background: var(--bg-main);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 8px;
+    height: 8px;
+    background: var(--brand-danger);
+    border-radius: 50%;
+    border: 1.5px solid #ffffff;
 }
 
 .current-date {
     background: var(--bg-main);
-    padding: 8px 14px;
+    padding: 10px 16px;
     border-radius: 20px;
     font-size: 13px;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    border: 1px solid var(--border-color);
 }
 
-/* --- Grid Body Content --- */
+/* --- Content Grid Layout --- */
 .content-body {
     padding: 32px;
     flex: 1;
@@ -172,14 +293,14 @@ body, html {
     gap: 32px;
 }
 
-/* Grid alignment that dynamically handles screen resizing */
+/* 4-Column Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 24px;
 }
 
-/* --- Clean Professional Cards --- */
+/* Refined Stat Cards */
 .stat-card {
     background: var(--surface);
     border: 1px solid var(--border-color);
@@ -188,33 +309,32 @@ body, html {
     display: flex;
     align-items: center;
     gap: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.03);
+    box-shadow: var(--shadow-md);
     transition: var(--transition);
 }
 
 .stat-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 }
 
 .stat-icon {
-    width: 56px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     border-radius: var(--radius-md);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 22px;
+    font-size: 24px;
 }
 
-/* Distinct subtle modern coloring instead of old bright blocks */
 .icon-blue { background: #e0f2fe; color: var(--brand-color); }
 .icon-green { background: #dcfce7; color: var(--brand-success); }
 .icon-red { background: #fee2e2; color: var(--brand-danger); }
+.icon-purple { background: #ede9fe; color: var(--brand-purple); }
 
-/* Alert border specifically highlighting crucial attention card */
 .alert-card {
-    border-left: 4px solid var(--brand-danger);
+    border-top: 4px solid var(--brand-danger); /* Accent red */
 }
 
 .stat-data .stat-title {
@@ -225,10 +345,11 @@ body, html {
 }
 
 .stat-data .stat-value {
-    font-size: 26px;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 800;
     margin: 4px 0;
     color: var(--text-primary);
+    letter-spacing: -0.5px;
 }
 
 .stat-data .stat-desc {
@@ -236,39 +357,127 @@ body, html {
     color: var(--text-secondary);
 }
 
-/* --- Premium Centered Urdu Banner --- */
-.premium-banner {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+/* --- Secondary Info Cards --- */
+.info-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Custom unequal columns */
+    gap: 24px;
+}
+
+.info-card {
+    background: var(--surface);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    padding: 50px 32px;
-    text-align: center;
-    position: relative;
-    border: 1px solid rgba(255,255,255,0.05);
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
+    padding: 30px;
+    box-shadow: var(--shadow-sm);
 }
 
-.banner-urdu-title {
-    font-family: 'Noto Nastaliq Urdu', serif;
-    font-size: 28px;
+/* Modernized Welcome Banner */
+.welcome-banner {
+    background: linear-gradient(135deg, #075985 0%, #0f172a 100%);
     color: #ffffff;
-    line-height: 2.4;
-    margin-bottom: 8px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    position: relative;
 }
 
-.banner-urdu-sub {
-    font-family: 'Noto Nastaliq Urdu', serif;
-    font-size: 16px;
-    color: #38bdf8;
+.banner-content {
+    flex: 1;
+    z-index: 2;
+}
+
+.banner-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.banner-sub {
+    font-size: 14px;
+    color: #e0f2fe;
     opacity: 0.9;
+    max-width: 80%;
+    margin-bottom: 20px;
+    font-weight: 300;
 }
 
-/* --- App Footer Align --- */
+.banner-btn {
+    background: #ffffff;
+    color: var(--brand-dark);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.banner-btn:hover {
+    background: #e0f2fe;
+    transform: scale(1.03);
+}
+
+.banner-graphic {
+    font-size: 100px;
+    color: rgba(255,255,255,0.1);
+    position: absolute;
+    right: 30px;
+    bottom: -20px;
+    z-index: 1;
+}
+
+/* Quick Actions Placeholder Style */
+.quick-actions h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+}
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.action-buttons button {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 12px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.action-buttons button:hover {
+    background: #e0f2fe;
+    color: var(--brand-dark);
+    border-color: var(--brand-color);
+}
+
+.action-buttons button i {
+    font-size: 14px;
+    color: var(--brand-color);
+}
+
+/* --- Clean Footer --- */
 .app-footer {
-    padding: 16px 32px;
+    padding: 18px 32px;
     background: var(--surface);
     border-top: 1px solid var(--border-color);
     text-align: center;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
     margin-top: auto;
 }
