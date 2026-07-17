@@ -3,147 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Medicine Point | Pharmacy Dashboard</title>
-    <!-- Clean Google Font -->
+    <title>The Medicine Point | Pharmacy Management System</title>
+    <!-- Modern Enterprise Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
+    <!-- Font Awesome Pro Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="header">
-    <div class="header-left">
-        <div class="logo">
-            <i class="fa-solid fa-capsules"></i>
-        </div>
-        <div class="brand-details">
-            <h1>The Medicine Point</h1>
-            <p class="brand-sub">Healthcare Solutions Platform</p>
-        </div>
-    </div>
-    <div class="header-right">
-        <span class="user-profile"><i class="fa-regular fa-user"></i> Admin Panel</span>
-    </div>
-</div>
-
-<div class="layout">
-    <!-- Left Sidebar -->
-    <div class="sidebar">
-        <h2>MAIN MENU</h2>
-        <button class="active"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
-        <button><i class="fa-solid fa-pills"></i> Medicine Stock</button>
-        <button><i class="fa-solid fa-receipt"></i> New Sale</button>
-        <button><i class="fa-solid fa-box-open"></i> Purchase</button>
-        <button><i class="fa-solid fa-users"></i> Customers</button>
-        <button><i class="fa-solid fa-chart-line"></i> Reports</button>
-    </div>
-
-    <!-- Right Content Area -->
-    <div class="content">
-        <div class="content-header">
-            <h2>Dashboard Overview</h2>
-            <p class="date-text">System Active | Welcome back, Admin</p>
-        </div>
-
-        <!-- 4 Metrics Cards Grid -->
-        <div class="cards">
-            <div class="card card-blue">
-                <div class="card-icon"><i class="fa-solid fa-pills"></i></div>
-                <div class="card-info">
-                    <h3>Total Medicines</h3>
-                    <h1>1,240</h1>
-                    <p>Available Items</p>
+    <div class="app-container">
+        
+        <!-- Fixed Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo"><i class="fa-solid fa-mortar-pestle"></i></div>
+                <div class="brand-text">
+                    <h1>Medicine Point</h1>
+                    <span class="brand-slogan">Healthcare Solutions</span>
                 </div>
             </div>
 
-            <div class="card card-green">
-                <div class="card-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
-                <div class="card-info">
-                    <h3>Today's Sale</h3>
-                    <h1>Rs 24,500</h1>
-                    <p>Today's Income</p>
-                </div>
-            </div>
+            <nav class="sidebar-menu">
+                <button class="menu-item active"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+                <button class="menu-item"><i class="fa-solid fa-pills"></i> Inventory</button>
+                <button class="menu-item"><i class="fa-solid fa-file-invoice-dollar"></i> POS & Sales</button>
+                <button class="menu-item"><i class="fa-solid fa-truck-ramp-box"></i> Purchases</button>
+                <button class="menu-item"><i class="fa-solid fa-user-tie"></i> Customers</button>
+                <button class="menu-item"><i class="fa-solid fa-building-columns"></i> Suppliers</button>
+                <button class="menu-item"><i class="fa-solid fa-chart-column"></i> Analytics</button>
+                <button class="menu-item"><i class="fa-solid fa-gear"></i> Settings</button>
+            </nav>
 
-            <div class="card card-red">
-                <div class="card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                <div class="card-info">
-                    <h3>Low Stock</h3>
-                    <h1>12</h1>
-                    <p>Need Attention</p>
+            <div class="sidebar-user">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=0284c7&color=fff&rounded=true" alt="Admin" class="user-avatar">
+                <div class="user-info">
+                    <span class="user-name">Admin User</span>
+                    <span class="user-role">Administrator</span>
                 </div>
+                <button class="logout-btn"><i class="fa-solid fa-power-off"></i></button>
             </div>
+        </aside>
 
-            <div class="card card-purple">
-                <div class="card-icon"><i class="fa-solid fa-hourglass-half"></i></div>
-                <div class="card-info">
-                    <h3>Near Expiry</h3>
-                    <h1>07</h1>
-                    <p>Within 30 Days</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Middle Info Layout (Table & Quick Actions) -->
-        <div class="main-grid">
+        <!-- Main Content Area -->
+        <main class="main-content">
             
-            <!-- Live Inventory Alerts Table -->
-            <div class="data-panel">
-                <div class="panel-header">
-                    <h3>Critical Stock Log</h3>
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="page-header">
+                    <h2>Analytics Dashboard</h2>
+                    <p>Good Morning, Admin! Here’s your performance summary.</p>
                 </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Item Name</th>
-                            <th>Location</th>
-                            <th>Stock</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Panadol 500mg</strong></td>
-                            <td>Rack A-3</td>
-                            <td style="color: var(--brand-danger); font-weight:600;">40 Pcs</td>
-                            <td><span class="badge badge-red">Low Stock</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Augmentin 625mg</strong></td>
-                            <td>Refrigerator</td>
-                            <td style="color: var(--brand-danger); font-weight:600;">02 Pcs</td>
-                            <td><span class="badge badge-red">Out of Stock</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Surbex-Z Tablets</strong></td>
-                            <td>Rack D-4</td>
-                            <td>120 Pcs</td>
-                            <td><span class="badge badge-purple">Near Expiry</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="navbar-actions">
+                    <div class="search-bar">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" placeholder="Search medicines, bills...">
+                    </div>
+                    <button class="action-btn"><i class="fa-solid fa-bell"></i><span class="notification-badge"></span></button>
+                    <div class="current-date">
+                        <i class="fa-regular fa-calendar-days"></i> <span>Friday, July 17, 2026</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Body -->
+            <div class="content-body">
+                
+                <!-- Main Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon icon-blue">
+                            <i class="fa-solid fa-box-archive"></i>
+                        </div>
+                        <div class="stat-data">
+                            <span class="stat-title">Total SKUs</span>
+                            <h2 class="stat-value">1,240</h2>
+                            <span class="stat-desc">Unique Medicines</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon icon-green">
+                            <i class="fa-solid fa-cash-register"></i>
+                        </div>
+                        <div class="stat-data">
+                            <span class="stat-title">Today's Revenue</span>
+                            <h2 class="stat-value">Rs 24,500</h2>
+                            <span class="stat-desc">+12.5% vs Yesterday</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card alert-card">
+                        <div class="stat-icon icon-red">
+                            <i class="fa-solid fa-heart-circle-exclamation"></i>
+                        </div>
+                        <div class="stat-data">
+                            <span class="stat-title">Critical Stock</span>
+                            <h2 class="stat-value">12</h2>
+                            <span class="stat-desc">Needs Immediate Restock</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon icon-purple">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <div class="stat-data">
+                            <span class="stat-title">Expiring Soon</span>
+                            <h2 class="stat-value">7</h2>
+                            <span class="stat-desc">Within 30 Days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Info Section -->
+                <div class="info-grid">
+                    <div class="info-card welcome-banner">
+                        <div class="banner-content">
+                            <h2 class="banner-title">Welcome to Enterprise Edition</h2>
+                            <p class="banner-sub">Your complete pharmacy management, inventory, and sales intelligence system. Streamline operations and enhance patient care efficiently.</p>
+                            <button class="banner-btn">View Reports</button>
+                        </div>
+                        <div class="banner-graphic">
+                            <i class="fa-solid fa-user-md"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions Placeholder -->
+                    <div class="info-card quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="action-buttons">
+                            <button><i class="fa-solid fa-plus"></i> New Sale</button>
+                            <button><i class="fa-solid fa-pills"></i> Add Stock</button>
+                            <button><i class="fa-solid fa-file-invoice"></i> Reports</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Quick Launch Buttons -->
-            <div class="data-panel">
-                <div class="panel-header">
-                    <h3>Quick Actions</h3>
-                </div>
-                <div class="quick-buttons">
-                    <button class="btn-primary"><i class="fa-solid fa-plus"></i> Create New Invoice</button>
-                    <button class="btn-secondary"><i class="fa-solid fa-box"></i> Restock Medicine</button>
-                    <button class="btn-secondary"><i class="fa-solid fa-file-invoice"></i> Generate Report</button>
-                </div>
-            </div>
-
-        </div>
+            <!-- Fixed Footer -->
+            <footer class="app-footer">
+                <span>The Medicine Point v3.5.2 | Licensed to [Pharmacy Name]</span>
+                <span>Powered by Healthcare Analytics © 2026</span>
+            </footer>
+        </main>
     </div>
-</div>
-
-<footer>
-    <p>The Medicine Point &copy; 2026 | Enterprise Edition</p>
-</footer>
 
 </body>
 </html>
