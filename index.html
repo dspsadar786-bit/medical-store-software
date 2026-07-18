@@ -37,7 +37,7 @@
         .stat-card.clickable-card { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
         .stat-card.clickable-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
 
-        /* Dynamic Form Table Grid styling */
+        /* Grid Framework */
         .sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .data-card { background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; margin-top: 10px; }
@@ -183,7 +183,7 @@
                             </div>
                             <table class="data-table">
                                 <thead>
-                                    <tr><th>Item</th><th>Company</th><th>Expiry</th><th>Qty</th><th>Price</th><th>Action</th></tr>
+                                    <tr><th>Item</th><th>Company</th><th>Rack</th><th>Expiry</th><th>Qty</th><th>Price</th><th>Action</th></tr>
                                 </thead>
                                 <tbody id="inventory-table-body"></tbody>
                             </table>
@@ -237,16 +237,18 @@
                                 <div class="form-group"><label>Supplier Name</label><input type="text" id="p-supplier" required></div>
                                 <div class="form-group"><label>Medicine/Item Name</label><input type="text" id="p-item" placeholder="e.g. Panadol Syrup" required></div>
                                 <div class="form-group"><label>Company Name</label><input type="text" id="p-company" placeholder="e.g. GSK" required></div>
+                                <div class="form-group"><label>Rack Location</label><input type="text" id="p-rack" value="Rack A-1" required></div>
+                                <div class="form-group"><label>Expiry Date</label><input type="month" id="p-expiry" required></div>
                                 <div class="form-group"><label>Quantity Purchased</label><input type="number" id="p-qty" value="100" required></div>
                                 <div class="form-group"><label>Cost Price Per Piece (Rs)</label><input type="number" id="p-unit-price" step="0.01" value="10" required></div>
                                 <div class="form-group"><label>Total Bill Amount (Rs)</label><input type="number" id="p-total" readonly style="background:#f1f5f9;"></div>
-                                <button type="submit" class="submit-btn">Save Invoice & Link to Stock</button>
+                                <button type="submit" class="submit-btn">Save Invoice & Send to Inventory</button>
                             </form>
                         </div>
                         <div class="data-card">
                             <h3>Purchase Order History</h3>
                             <table class="data-table">
-                                <thead><tr><th>Supplier</th><th>Details</th><th>Qty</th><th>Total Paid</th></tr></thead>
+                                <thead><tr><th>Supplier</th><th>Details</th><th>Rack/Exp</th><th>Qty</th><th>Total Paid</th></tr></thead>
                                 <tbody id="purchases-table-body"></tbody>
                             </table>
                         </div>
@@ -330,7 +332,6 @@
                             <input type="text" value="PKR (Rs.)" readonly style="background:#f1f5f9;">
                         </div>
                         
-                        <!-- Password Change Box -->
                         <div style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed #e2e8f0; max-width: 300px;">
                             <h4 style="color: #0f172a; margin-bottom: 10px;"><i class="fa-solid fa-lock" style="color: #0284c7;"></i> Change Admin Password</h4>
                             <form id="change-password-form">
@@ -341,55 +342,45 @@
                                 <button type="submit" class="submit-btn" style="background:#0f172a;">Update Password</button>
                             </form>
                         </div>
-                        
-                        <br>
-                        <p style="color:#64748b; font-size:12px;"><i class="fa-solid fa-circle-info"></i> Security updates and terminal connection configurations are managed automatically.</p>
                     </div>
                 </div>
 
             </div>
             <footer class="app-footer">
-                <span>The Medicine Point v4.0.0 | Licensed to [Pharmacy Name]</span>
+                <span>The Medicine Point v4.1.0 | Licensed to [Pharmacy Name]</span>
                 <span>Powered by Healthcare Analytics © 2026</span>
             </footer>
         </main>
     </div>
 
     <script>
-        // GLOBAL VARIABLE FOR ADMIN PASSWORD
         let currentAdminPassword = 'admin123';
 
-        // AUTH LOGIC WITH STABLE EVALUATION
         const authScreen = document.getElementById('auth-screen');
         const appWorkspace = document.getElementById('app-workspace');
         
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            
             const userInput = document.getElementById('username').value.trim();
             const passInput = document.getElementById('password').value.trim();
 
             if(userInput === 'admin' && passInput === currentAdminPassword) {
                 authScreen.style.display = 'none';
                 appWorkspace.style.display = 'flex';
-                // Set default date to today in customer screen
                 document.getElementById('c-date').value = new Date().toISOString().split('T')[0];
                 updateSystemUI();
             } else {
-                alert('Oops! Invalid login details. Please try again.');
+                alert('Invalid credentials!');
             }
         });
 
         document.getElementById('logout-trigger').addEventListener('click', () => {
-            if(confirm('Are you sure you want to secure log out?')) {
+            if(confirm('Are you sure you want to log out?')) {
                 appWorkspace.style.display = 'none';
                 authScreen.style.display = 'flex';
-                document.getElementById('login-form').reset();
-                document.getElementById('password').value = ''; 
             }
         });
 
-        // VIEW ROUTER
         const menuItems = document.querySelectorAll('.menu-item');
         const pageViews = document.querySelectorAll('.page-view');
         const mainTitle = document.getElementById('main-page-title');
@@ -405,12 +396,10 @@
         });
 
         function triggerMenu(id) {
-            resetInventoryView();
             const btn = document.querySelector(`[data-target="${id}"]`);
             if(btn) btn.click();
         }
 
-        // DATABASE STATE (INITIALIZED EMPTY AS REQUESTED)
         let medicineDatabase = [];
         let purchasesData = [];
         let customersData = [];
@@ -419,16 +408,12 @@
         let totalSalesRevenue = 0;
         let totalPurchaseExpense = 0;
         
-        // Active global filter flag for dashboard redirection
         let activeInventoryFilter = 'all'; 
 
-        // DYNAMIC RENDERING SYSTEM ENGINE
         function updateSystemUI(filterKeyword = '') {
             let criticalCount = 0;
             let expiringCount = 0;
-            
-            // Expiry Evaluation Setup (6 Months Limit from today July 2026 -> January 2027)
-            let sixMonthsLimit = new Date(2027, 0, 31); // Jan 31, 2027
+            let sixMonthsLimit = new Date(2027, 0, 31); // 6 Months Check (Jan 2027)
 
             document.getElementById('inventory-table-body').innerHTML = '';
             let searchKey = filterKeyword.toLowerCase().trim();
@@ -440,17 +425,14 @@
                 let isExpiringSoon = false;
                 if(med.expiry) {
                     let parts = med.expiry.split('-');
-                    let expYear = parseInt(parts[0]);
-                    let expMonth = parseInt(parts[1]) - 1;
-                    let medDate = new Date(expYear, expMonth, 1);
-
+                    let medDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, 1);
                     if(medDate <= sixMonthsLimit) {
                         isExpiringSoon = true;
                         expiringCount++;
                     }
                 }
 
-                // Check active dashboard filters or keyword search
+                // Check dashboard redirection states
                 let matchesFilter = true;
                 if(activeInventoryFilter === 'critical' && !isCritical) matchesFilter = false;
                 if(activeInventoryFilter === 'expiring' && !isExpiringSoon) matchesFilter = false;
@@ -462,18 +444,18 @@
                     tr.innerHTML = `
                         <td><b>${med.name}</b> ${isExpiringSoon ? '<span class="badge-alert">Expiring</span>':''}</td>
                         <td>${med.company}</td>
+                        <td>${med.rack}</td>
                         <td>${med.expiry}</td>
                         <td style="color:${isCritical ? '#ef4444':'#22c55e'}">${med.qty} Pcs</td>
                         <td>Rs. ${med.price}</td>
                         <td>
-                            <button onclick="editMedicine(${med.id})" style="color:#0284c7; border:none; background:none; cursor:pointer; margin-right:8px;" title="Edit Product"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteMedicine(${med.id})" style="color:#ef4444; border:none; background:none; cursor:pointer;" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="editMedicine(${med.id})" style="color:#0284c7; border:none; background:none; cursor:pointer; margin-right:8px;"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteMedicine(${med.id})" style="color:#ef4444; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
                         </td>`;
                     document.getElementById('inventory-table-body').appendChild(tr);
                 }
             });
 
-            // Counters assignment
             document.getElementById('dash-total-skus').innerText = medicineDatabase.length;
             document.getElementById('dash-critical-stock').innerText = criticalCount;
             document.getElementById('dash-expiring-soon').innerText = expiringCount;
@@ -481,12 +463,11 @@
             document.getElementById('report-sales').innerText = "Rs. " + totalSalesRevenue.toFixed(2);
             document.getElementById('report-expense').innerText = "Rs. " + totalPurchaseExpense.toFixed(2);
 
-            // Re-render POS Select Box options
-            renderPosSelectOptions();
+            renderPosSelectOptions(document.getElementById('pos-search-input').value);
             renderModuleTables();
         }
 
-        // Live filtration logic for POS Search box
+        // FIXED LIVE SEARCH & FILL LOGIC FOR POS DROPDOWN
         document.getElementById('pos-search-input').addEventListener('input', (e) => {
             renderPosSelectOptions(e.target.value);
         });
@@ -503,7 +484,7 @@
             if(filtered.length === 0) {
                 let op = document.createElement('option');
                 op.value = "";
-                op.innerText = "No medicine found";
+                op.innerText = "No match found";
                 posDropdown.appendChild(op);
                 return;
             }
@@ -511,17 +492,23 @@
             filtered.forEach(med => {
                 let op = document.createElement('option');
                 op.value = med.id;
-                op.innerText = `${med.name} (Stock: ${med.qty} | Rs. ${med.price})`;
+                op.innerText = `${med.name} (Loc: ${med.rack} | Stock: ${med.qty})`;
                 posDropdown.appendChild(op);
             });
         }
 
+        // FIXED DASHBOARD REDIRECTION FILTERS
         function showDashboardFilteredList(type) {
             activeInventoryFilter = type;
             document.getElementById('clear-filter-btn').style.display = 'inline-block';
+            
+            // Trigger routing to the standard inventory panel view
             triggerMenu('view-inventory');
-            if(type === 'critical') mainTitle.innerText = "Inventory Management (Critical Stock)";
-            if(type === 'expiring') mainTitle.innerText = "Inventory Management (Expiring Stock)";
+            
+            if(type === 'critical') mainTitle.innerText = "Inventory Management (Critical Only)";
+            if(type === 'expiring') mainTitle.innerText = "Inventory Management (Expiring 6-Months Only)";
+            
+            updateSystemUI();
         }
 
         function resetInventoryView() {
@@ -535,7 +522,7 @@
             const pTable = document.getElementById('purchases-table-body');
             pTable.innerHTML = '';
             purchasesData.forEach(p => {
-                pTable.innerHTML += `<tr><td>${p.supplier}</td><td><b>${p.item}</b> (${p.company})</td><td>${p.qty} Pcs</td><td>Rs. ${p.total}</td></tr>`;
+                pTable.innerHTML += `<tr><td>${p.supplier}</td><td><b>${p.item}</b> (${p.company})</td><td>${p.rack} [${p.expiry}]</td><td>${p.qty} Pcs</td><td>Rs. ${p.total}</td></tr>`;
             });
 
             const cTable = document.getElementById('customers-table-body');
@@ -551,24 +538,18 @@
             });
         }
 
-        // AUTO-CALCULATE PURCHASES TOTAL BILL LIVE
         const pQtyInput = document.getElementById('p-qty');
         const pPriceInput = document.getElementById('p-unit-price');
         const pTotalInput = document.getElementById('p-total');
         
         function calcPurchaseTotal() {
-            let q = parseInt(pQtyInput.value || 0);
-            let p = parseFloat(pPriceInput.value || 0);
-            pTotalInput.value = (q * p).toFixed(2);
+            pTotalInput.value = (parseInt(pQtyInput.value || 0) * parseFloat(pPriceInput.value || 0)).toFixed(2);
         }
         pQtyInput.addEventListener('input', calcPurchaseTotal);
         pPriceInput.addEventListener('input', calcPurchaseTotal);
-        calcPurchaseTotal();
 
-        // EVENT LISTENERS FOR SEARCH IN INVENTORY
         document.getElementById('inventory-search').addEventListener('input', (e) => updateSystemUI(e.target.value));
 
-        // EDIT MEDICINE OPERATION ENGINE
         function editMedicine(id) {
             const item = medicineDatabase.find(m => m.id === id);
             if(!item) return;
@@ -584,14 +565,10 @@
             document.getElementById('form-inventory-title').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Edit Product`;
             document.getElementById('med-submit-btn').innerText = "Update Product";
             document.getElementById('cancel-edit-btn').style.display = 'block';
-            
-            // Scroll smoothly to form view top
             document.getElementById('add-medicine-form').scrollIntoView({ behavior: 'smooth' });
         }
 
-        document.getElementById('cancel-edit-btn').addEventListener('click', () => {
-            clearInventoryForm();
-        });
+        document.getElementById('cancel-edit-btn').addEventListener('click', () => clearInventoryForm());
 
         function clearInventoryForm() {
             document.getElementById('add-medicine-form').reset();
@@ -602,7 +579,6 @@
             document.getElementById('cancel-edit-btn').style.display = 'none';
         }
 
-        // SAVE / UPDATE MEDICINE
         document.getElementById('add-medicine-form').addEventListener('submit', (e) => {
             e.preventDefault();
             let editId = document.getElementById('med-edit-id').value;
@@ -617,51 +593,44 @@
             };
 
             if(editId) {
-                // UPDATE EXISITING
                 let idx = medicineDatabase.findIndex(m => m.id == editId);
-                if(idx !== -1) {
-                    medData.id = parseInt(editId);
-                    medicineDatabase[idx] = medData;
-                    alert("Medicine updated successfully!");
-                }
+                if(idx !== -1) { medData.id = parseInt(editId); medicineDatabase[idx] = medData; }
             } else {
-                // INSERT NEW
                 medData.id = Date.now();
                 medicineDatabase.push(medData);
-                alert("Medicine saved to stock directory.");
             }
             
             clearInventoryForm();
-            updateSystemUI();
+            resetInventoryView();
         });
 
         function deleteMedicine(id) {
-            if(confirm("Are you sure you want to completely remove this medicine?")) {
+            if(confirm("Delete this product?")) {
                 medicineDatabase = medicineDatabase.filter(m => m.id !== id);
                 updateSystemUI();
             }
         }
 
-        // POS CORE OPERATIONS
+        // POS CONTROL
         document.getElementById('add-to-cart-btn').addEventListener('click', () => {
             const id = parseInt(document.getElementById('pos-med-select').value);
             const qty = parseInt(document.getElementById('pos-med-qty').value);
-            if(!id) { alert("Pehle list se medicine product select ya search karein!"); return; }
+            if(!id) { alert("Please select or search a valid medicine item."); return; }
             const item = medicineDatabase.find(m => m.id === id);
             
-            if(!item || qty > item.qty) { alert("Stock limit exceeded! Selected quantity is unavailable."); return; }
+            if(!item || qty > item.qty) { alert("Stock limit exceeded!"); return; }
             
             let cartItem = shoppingCart.find(c => c.id === id);
             if(cartItem) { 
-                if((cartItem.qty + qty) > item.qty) { alert("Cannot add more! Stock limit crossed."); return; }
+                if((cartItem.qty + qty) > item.qty) { alert("Stock boundary overflow!"); return; }
                 cartItem.qty += qty; 
-            } 
-            else { shoppingCart.push({ id: item.id, name: item.name, price: item.price, qty: qty }); }
+            } else { 
+                shoppingCart.push({ id: item.id, name: item.name, price: item.price, qty: qty }); 
+            }
             
-            // Clear POS Search input & reset dropdown selection state
             document.getElementById('pos-search-input').value = '';
-            renderPosSelectOptions();
             renderCart();
+            updateSystemUI();
         });
 
         function renderCart() {
@@ -688,54 +657,56 @@
             shoppingCart = [];
             renderCart();
             updateSystemUI();
-            alert("Invoice generated and stock updated successfully!");
+            alert("Sale completed!");
         });
 
-        // CONNECTED PURCHASE FORM - AUTOMATIC INVENTORY LINKING
+        // COMPLETE PURCHASES PROCESS FLOW (DIRECT INTEGRATION WITH EXPIRY AND RACK FIELDS)
         document.getElementById('purchase-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            let pItemName = document.getElementById('p-item').value;
-            let pCompanyName = document.getElementById('p-company').value;
+            let pItemName = document.getElementById('p-item').value.trim();
+            let pCompanyName = document.getElementById('p-company').value.trim();
+            let pRackLoc = document.getElementById('p-rack').value.trim();
+            let pExpiryDate = document.getElementById('p-expiry').value;
             let pQtyValue = parseInt(document.getElementById('p-qty').value);
             let pCostPrice = parseFloat(document.getElementById('p-unit-price').value);
             let val = parseFloat(document.getElementById('p-total').value);
 
-            // Save to Purchase Order History
             purchasesData.push({ 
                 supplier: document.getElementById('p-supplier').value, 
                 item: pItemName, 
                 company: pCompanyName,
+                rack: pRackLoc,
+                expiry: pExpiryDate,
                 qty: pQtyValue,
                 total: val 
             });
             totalPurchaseExpense += val;
 
-            // --- LINKED ACTION: AUTOMATICALLY SEND/UPDATE INVENTORY ---
-            // Check if item already exists in database
+            // Save straight into stock with zero secondary manual modification needed
             let existingMed = medicineDatabase.find(m => m.name.toLowerCase() === pItemName.toLowerCase());
-            
             if(existingMed) {
-                existingMed.qty += pQtyValue; // update stock automatically
+                existingMed.qty += pQtyValue;
+                existingMed.rack = pRackLoc;       // override location updates
+                existingMed.expiry = pExpiryDate;   // override batch records
             } else {
-                // Append as a new item structure to inventory database automatically
                 medicineDatabase.push({
                     id: Date.now(),
                     name: pItemName,
                     company: pCompanyName,
-                    rack: "Rack A-1",
-                    expiry: new Date(2027, 6).toISOString().substring(0, 7), // Future dummy expiry to configure later
+                    rack: pRackLoc,
+                    expiry: pExpiryDate,
                     qty: pQtyValue,
-                    price: parseFloat((pCostPrice * 1.2).toFixed(2)) // Auto retail pricing structure with 20% standard margin
+                    price: parseFloat((pCostPrice * 1.25).toFixed(2)) // Auto retail mark up
                 });
             }
 
             document.getElementById('purchase-form').reset();
+            document.getElementById('p-rack').value = 'Rack A-1';
             calcPurchaseTotal();
             updateSystemUI();
-            alert("Purchase order successfully locked! Item automatically transferred to Inventory stock repository.");
+            alert("Stock directly pushed to Inventory database directory!");
         });
 
-        // CUSTOMERS FORM DATA HANDLING WITH NEW FIELDS
         document.getElementById('customer-form').addEventListener('submit', (e) => {
             e.preventDefault();
             customersData.push({ 
@@ -748,7 +719,7 @@
             document.getElementById('customer-form').reset();
             document.getElementById('c-date').value = new Date().toISOString().split('T')[0];
             updateSystemUI();
-            alert("Customer account registry updated successfully.");
+            alert("Customer record saved!");
         });
 
         document.getElementById('supplier-form').addEventListener('submit', (e) => {
@@ -756,22 +727,14 @@
             suppliersData.push({ name: document.getElementById('s-name').value, phone: document.getElementById('s-phone').value, city: document.getElementById('s-city').value });
             document.getElementById('supplier-form').reset();
             updateSystemUI();
-            alert("Wholesale Vendor registered.");
         });
 
-        // PASSWORD CHANGE ACTION
         document.getElementById('change-password-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const newPass = document.getElementById('new-sys-password').value.trim();
-            if(newPass.length < 4) {
-                alert("Password kam az kam 4 characters ka hona chahiye!");
-                return;
-            }
-            currentAdminPassword = newPass; 
+            currentAdminPassword = document.getElementById('new-sys-password').value.trim();
             document.getElementById('change-password-form').reset();
-            alert("Success! Admin password successfully updated.");
+            alert("Password updated!");
         });
-
     </script>
 </body>
 </html>
