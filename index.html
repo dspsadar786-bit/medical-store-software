@@ -9,6 +9,31 @@
     <!-- Font Awesome Pro Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS helpers to show/hide pages smoothly */
+        .page-view {
+            display: none;
+            width: 100%;
+        }
+        .page-view.active-view {
+            display: block;
+        }
+        /* Custom styles for content placeholders */
+        .placeholder-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            color: #64748b;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        .placeholder-card i {
+            font-size: 48px;
+            color: #0284c7;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
 
@@ -24,16 +49,16 @@
                 </div>
             </div>
 
-           <nav class="sidebar-menu">
-    <button class="menu-item active" data-target="view-dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
-    <button class="menu-item" data-target="view-inventory"><i class="fa-solid fa-pills"></i> Inventory</button>
-    <button class="menu-item" data-target="view-pos"><i class="fa-solid fa-file-invoice-dollar"></i> POS & Sales</button>
-    <button class="menu-item" data-target="view-purchases"><i class="fa-solid fa-truck-ramp-box"></i> Purchases</button>
-    <button class="menu-item" data-target="view-customers"><i class="fa-solid fa-user-tie"></i> Customers</button>
-    <button class="menu-item" data-target="view-suppliers"><i class="fa-solid fa-building-columns"></i> Suppliers</button>
-    <button class="menu-item" data-target="view-analytics"><i class="fa-solid fa-chart-column"></i> Analytics</button>
-    <button class="menu-item" data-target="view-settings"><i class="fa-solid fa-gear"></i> Settings</button>
-</nav>
+            <nav class="sidebar-menu">
+                <button class="menu-item active" data-target="view-dashboard" data-title="Analytics Dashboard" data-subtitle="Good Morning, Admin! Here’s your performance summary."><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+                <button class="menu-item" data-target="view-inventory" data-title="Inventory Management" data-subtitle="View, search and manage your medicine stocks."><i class="fa-solid fa-pills"></i> Inventory</button>
+                <button class="menu-item" data-target="view-pos" data-title="POS & Sales Counter" data-subtitle="Generate fresh billing invoices for retail customers."><i class="fa-solid fa-file-invoice-dollar"></i> POS & Sales</button>
+                <button class="menu-item" data-target="view-purchases" data-title="Stock Purchases" data-subtitle="Manage supplier bulk stock intake orders."><i class="fa-solid fa-truck-ramp-box"></i> Purchases</button>
+                <button class="menu-item" data-target="view-customers" data-title="Customer Registry" data-subtitle="View customer profiles and balance summaries."><i class="fa-solid fa-user-tie"></i> Customers</button>
+                <button class="menu-item" data-target="view-suppliers" data-title="Supplier Accounts" data-subtitle="Manage wholesale vendors and pending dues."><i class="fa-solid fa-building-columns"></i> Suppliers</button>
+                <button class="menu-item" data-target="view-analytics" data-title="Business Analytics" data-subtitle="Deep-dive reports into pharmacy sales performance."><i class="fa-solid fa-chart-column"></i> Analytics</button>
+                <button class="menu-item" data-target="view-settings" data-title="System Settings" data-subtitle="Configure application layouts, privileges, and printing options."><i class="fa-solid fa-gear"></i> Settings</button>
+            </nav>
 
             <div class="sidebar-user">
                 <img src="https://ui-avatars.com/api/?name=Admin+User&background=0284c7&color=fff&rounded=true" alt="Admin" class="user-avatar">
@@ -51,8 +76,9 @@
             <!-- Top Navbar -->
             <header class="top-navbar">
                 <div class="page-header">
-                    <h2>Analytics Dashboard</h2>
-                    <p>Good Morning, Admin! Here’s your performance summary.</p>
+                    <!-- Dynamic Headers managed by JavaScript -->
+                    <h2 id="main-page-title">Analytics Dashboard</h2>
+                    <p id="main-page-subtitle">Good Morning, Admin! Here’s your performance summary.</p>
                 </div>
                 <div class="navbar-actions">
                     <div class="search-bar">
@@ -69,74 +95,126 @@
             <!-- Scrollable Content Body -->
             <div class="content-body">
                 
-                <!-- Main Stats Grid -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon icon-blue">
-                            <i class="fa-solid fa-box-archive"></i>
+                <!-- 1. DASHBOARD VIEW -->
+                <div id="view-dashboard" class="page-view active-view">
+                    <!-- Main Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon icon-blue"><i class="fa-solid fa-box-archive"></i></div>
+                            <div class="stat-data">
+                                <span class="stat-title">Total SKUs</span>
+                                <h2 class="stat-value">1,240</h2>
+                                <span class="stat-desc">Unique Medicines</span>
+                            </div>
                         </div>
-                        <div class="stat-data">
-                            <span class="stat-title">Total SKUs</span>
-                            <h2 class="stat-value">1,240</h2>
-                            <span class="stat-desc">Unique Medicines</span>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-green"><i class="fa-solid fa-cash-register"></i></div>
+                            <div class="stat-data">
+                                <span class="stat-title">Today's Revenue</span>
+                                <h2 class="stat-value">Rs 24,500</h2>
+                                <span class="stat-desc">+12.5% vs Yesterday</span>
+                            </div>
+                        </div>
+                        <div class="stat-card alert-card">
+                            <div class="stat-icon icon-red"><i class="fa-solid fa-heart-circle-exclamation"></i></div>
+                            <div class="stat-data">
+                                <span class="stat-title">Critical Stock</span>
+                                <h2 class="stat-value">12</h2>
+                                <span class="stat-desc">Needs Immediate Restock</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-purple"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                            <div class="stat-data">
+                                <span class="stat-title">Expiring Soon</span>
+                                <h2 class="stat-value">7</h2>
+                                <span class="stat-desc">Within 30 Days</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="stat-card">
-                        <div class="stat-icon icon-green">
-                            <i class="fa-solid fa-cash-register"></i>
+                    <!-- Secondary Info Section -->
+                    <div class="info-grid">
+                        <div class="info-card welcome-banner">
+                            <div class="banner-content">
+                                <h2 class="banner-title">Welcome to Enterprise Edition</h2>
+                                <p class="banner-sub">Your complete pharmacy management, inventory, and sales intelligence system. Streamline operations and enhance patient care efficiently.</p>
+                                <button class="banner-btn">View Reports</button>
+                            </div>
+                            <div class="banner-graphic"><i class="fa-solid fa-user-md"></i></div>
                         </div>
-                        <div class="stat-data">
-                            <span class="stat-title">Today's Revenue</span>
-                            <h2 class="stat-value">Rs 24,500</h2>
-                            <span class="stat-desc">+12.5% vs Yesterday</span>
-                        </div>
-                    </div>
-
-                    <div class="stat-card alert-card">
-                        <div class="stat-icon icon-red">
-                            <i class="fa-solid fa-heart-circle-exclamation"></i>
-                        </div>
-                        <div class="stat-data">
-                            <span class="stat-title">Critical Stock</span>
-                            <h2 class="stat-value">12</h2>
-                            <span class="stat-desc">Needs Immediate Restock</span>
-                        </div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-icon icon-purple">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                        </div>
-                        <div class="stat-data">
-                            <span class="stat-title">Expiring Soon</span>
-                            <h2 class="stat-value">7</h2>
-                            <span class="stat-desc">Within 30 Days</span>
+                        
+                        <div class="info-card quick-actions">
+                            <h3>Quick Actions</h3>
+                            <div class="action-buttons">
+                                <button onclick="triggerMenu('view-pos')"><i class="fa-solid fa-plus"></i> New Sale</button>
+                                <button onclick="triggerMenu('view-inventory')"><i class="fa-solid fa-pills"></i> Add Stock</button>
+                                <button onclick="triggerMenu('view-analytics')"><i class="fa-solid fa-file-invoice"></i> Reports</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Secondary Info Section -->
-                <div class="info-grid">
-                    <div class="info-card welcome-banner">
-                        <div class="banner-content">
-                            <h2 class="banner-title">Welcome to Enterprise Edition</h2>
-                            <p class="banner-sub">Your complete pharmacy management, inventory, and sales intelligence system. Streamline operations and enhance patient care efficiently.</p>
-                            <button class="banner-btn">View Reports</button>
-                        </div>
-                        <div class="banner-graphic">
-                            <i class="fa-solid fa-user-md"></i>
-                        </div>
+                <!-- 2. INVENTORY VIEW -->
+                <div id="view-inventory" class="page-view">
+                    <div class="placeholder-card">
+                        <i class="fa-solid fa-pills"></i>
+                        <h2>Inventory Module</h2>
+                        <p>Stock management database loading... Ready for custom lists and stock addition logs.</p>
                     </div>
-                    
-                    <!-- Quick Actions Placeholder -->
-                    <div class="info-card quick-actions">
-                        <h3>Quick Actions</h3>
-                        <div class="action-buttons">
-                            <button><i class="fa-solid fa-plus"></i> New Sale</button>
-                            <button><i class="fa-solid fa-pills"></i> Add Stock</button>
-                            <button><i class="fa-solid fa-file-invoice"></i> Reports</button>
-                        </div>
+                </div>
+
+                <!-- 3. POS VIEW -->
+                <div id="view-pos" class="page-view">
+                    <div class="placeholder-card">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                        <h2>Point of Sale Counter</h2>
+                        <p>Billing system terminal... Cart generation and fast search interface panel ready.</p>
+                    </div>
+                </div>
+
+                <!-- 4. PURCHASES VIEW -->
+                <div id="view-purchases" class="page-view">
+                    <div class="placeholder-card">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                        <h2>Supplier Purchases</h2>
+                        <p>Bulk drug inventory intakes tracker panel.</p>
+                    </div>
+                </div>
+
+                <!-- 5. CUSTOMERS VIEW -->
+                <div id="view-customers" class="page-view">
+                    <div class="placeholder-card">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <h2>Customer Ledger</h2>
+                        <p>Profiles and accounts history records database.</p>
+                    </div>
+                </div>
+
+                <!-- 6. SUPPLIERS VIEW -->
+                <div id="view-suppliers" class="page-view">
+                    <div class="placeholder-card">
+                        <i class="fa-solid fa-building-columns"></i>
+                        <h2>Wholesale Suppliers</h2>
+                        <p>Distributors network profiles and pending ledger management.</p>
+                    </div>
+                </div>
+
+                <!-- 7. ANALYTICS VIEW -->
+                <div id="view-analytics" class="page-view">
+                    <div class="placeholder-card">
+                        <i class="fa-solid fa-chart-column"></i>
+                        <h2>System Reports</h2>
+                        <p>Business revenue and expense performance intelligence graphs.</p>
+                    </div>
+                </div>
+
+                <!-- 8. SETTINGS VIEW -->
+                <div id="view-settings" class="page-view">
+                    <div class="placeholder-card">
+                        <i class="fa-solid fa-gear"></i>
+                        <h2>Application Settings</h2>
+                        <p>Configure layouts, hardware connection (thermal printers), and user logs.</p>
                     </div>
                 </div>
 
@@ -149,20 +227,44 @@
             </footer>
         </main>
     </div>
+
+    <!-- Core View Router Logic -->
     <script>
         const menuItems = document.querySelectorAll('.menu-item');
-        
+        const pageViews = document.querySelectorAll('.page-view');
+        const mainTitle = document.getElementById('main-page-title');
+        const mainSubtitle = document.getElementById('main-page-subtitle');
+
         menuItems.forEach(item => {
             item.addEventListener('click', () => {
+                // Remove active classes
                 menuItems.forEach(i => i.classList.remove('active'));
-                
+                pageViews.forEach(v => v.classList.remove('active-view'));
+
+                // Add active state to clicked button
                 item.classList.add('active');
+
+                // Get targeting info
+                const targetViewId = item.getAttribute('data-target');
+                const titleText = item.getAttribute('data-title');
+                const subtitleText = item.getAttribute('data-subtitle');
+
+                // Switch pages
+                document.getElementById(targetViewId).classList.add('active-view');
                 
-                console.log("Clicked on: " + item.getAttribute('data-target'));
+                // Switch dynamic page headers
+                mainTitle.innerText = titleText;
+                mainSubtitle.innerText = subtitleText;
             });
         });
-    </script>
-</body>
 
+        // Helper function for Quick Actions links inside Dashboard
+        function triggerMenu(targetId) {
+            const linkedButton = document.querySelector(`[data-target="${targetId}"]`);
+            if(linkedButton) {
+                linkedButton.click();
+            }
+        }
+    </script>
 </body>
 </html>
