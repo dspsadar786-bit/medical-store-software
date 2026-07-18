@@ -166,8 +166,16 @@
                                     <input type="text" id="med-name" required placeholder="e.g., Panadol 500mg" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
                                 </div>
                                 <div>
+                                    <label style="display:block; font-size:12px; font-weight:600; color:#64748b; margin-bottom:5px;">Company Name</label>
+                                    <input type="text" id="med-company" required placeholder="e.g., GSK, Searle" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                </div>
+                                <div>
                                     <label style="display:block; font-size:12px; font-weight:600; color:#64748b; margin-bottom:5px;">Rack Location</label>
                                     <input type="text" id="med-rack" placeholder="e.g., Rack A-3" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:12px; font-weight:600; color:#64748b; margin-bottom:5px;">Expiry Date</label>
+                                    <input type="month" id="med-expiry" required style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
                                 </div>
                                 <div>
                                     <label style="display:block; font-size:12px; font-weight:600; color:#64748b; margin-bottom:5px;">Stock Quantity</label>
@@ -187,7 +195,7 @@
                         <div style="background: linear-gradient(135deg, #0f172a, #1e293b); padding: 20px; border-radius: 12px; color: #fff; display: flex; flex-direction: column; justify-content: space-between;">
                             <div>
                                 <h3 style="font-size: 16px; margin-bottom: 5px;">Stock Management</h3>
-                                <p style="color: #94a3b8; font-size: 12px; line-height: 1.5;">Items added here will instantly become available for billing in the POS section. You can also delete obsolete products.</p>
+                                <p style="color: #94a3b8; font-size: 12px; line-height: 1.5;">Items added here will instantly become available for billing in the POS section. You can search products instantly using the search box below.</p>
                             </div>
                             <div style="border-top: 1px solid #334155; padding-top: 15px;">
                                 <span style="font-size: 12px; color: #94a3b8; display:block;">Total Live Medicines</span>
@@ -196,13 +204,25 @@
                         </div>
                     </div>
 
-                    <!-- Inventory Table -->
+                    <!-- Inventory Table Box with Search Bar Inside -->
                     <div style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                        
+                        <!-- Real-time Live Medicine Search Box -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 20px;">
+                            <h3 style="color: #0f172a; white-space: nowrap;">Current Stock Directory</h3>
+                            <div style="position: relative; width: 100%; max-width: 350px;">
+                                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 12px; color: #64748b;"></i>
+                                <input type="text" id="inventory-search" placeholder="Search medicine or company name..." style="width: 100%; padding: 10px 10px 10px 35px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px;">
+                            </div>
+                        </div>
+
                         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
                             <thead>
                                 <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
                                     <th style="padding: 12px; font-weight:600; color:#475569;">Medicine Name</th>
+                                    <th style="padding: 12px; font-weight:600; color:#475569;">Company</th>
                                     <th style="padding: 12px; font-weight:600; color:#475569;">Location</th>
+                                    <th style="padding: 12px; font-weight:600; color:#475569;">Expiry</th>
                                     <th style="padding: 12px; font-weight:600; color:#475569;">Stock</th>
                                     <th style="padding: 12px; font-weight:600; color:#475569;">Price</th>
                                     <th style="padding: 12px; font-weight:600; color:#475569;">Status</th>
@@ -357,11 +377,11 @@
         // CORE APPLICATION DATABASE & LOGIC
         // ==========================================
         
-        // Global Master Database Array
+        // Global Master Database Array (Added company and expiry properties)
         let medicineDatabase = [
-            { id: 1, name: 'Panadol 500mg', rack: 'Rack A-3', qty: 40, price: 3.50 },
-            { id: 2, name: 'Augmentin 625mg', rack: 'Refrigerator', qty: 180, price: 45.00 },
-            { id: 3, name: 'Surbex-Z Tablets', rack: 'Rack D-4', qty: 120, price: 25.00 }
+            { id: 1, name: 'Panadol 500mg', company: 'GSK', rack: 'Rack A-3', qty: 40, price: 3.50, expiry: '2028-12' },
+            { id: 2, name: 'Augmentin 625mg', company: 'GSK', rack: 'Refrigerator', qty: 180, price: 45.00, expiry: '2027-06' },
+            { id: 3, name: 'Surbex-Z Tablets', company: 'Abbott', rack: 'Rack D-4', qty: 120, price: 25.00, expiry: '2028-01' }
         ];
 
         let shoppingCart = [];
@@ -372,12 +392,21 @@
         const totalMedCount = document.getElementById('total-med-count');
         const cartTableBody = document.getElementById('cart-table-body');
         const billTotalAmount = document.getElementById('bill-total-amount');
+        const inventorySearchInput = document.getElementById('inventory-search');
 
-        // Function to render layout data everywhere
-        function updateSystemUI() {
-            // 1. Render Inventory Table
+        // Function to render layout data everywhere (with optional search filter)
+        function updateSystemUI(filterKeyword = '') {
             inventoryTableBody.innerHTML = '';
+            
+            // Convert filter keyword to lowercase for flawless match
+            let cleanKeyword = filterKeyword.toLowerCase().trim();
+
             medicineDatabase.forEach((med) => {
+                // Search condition matching both name and company name
+                if (cleanKeyword !== '' && !med.name.toLowerCase().includes(cleanKeyword) && !med.company.toLowerCase().includes(cleanKeyword)) {
+                    return; // Skip item if it doesn't match search
+                }
+
                 let badge = med.qty < 50 ? 
                     `<span style="background:#fee2e2; color:#ef4444; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:600;">Low Stock</span>` : 
                     `<span style="background:#dcfce7; color:#22c55e; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:600;">Good</span>`;
@@ -386,7 +415,9 @@
                 row.style.borderBottom = "1px solid #e2e8f0";
                 row.innerHTML = `
                     <td style="padding: 12px; font-weight:600;">${med.name}</td>
+                    <td style="padding: 12px; color:#475569; font-weight:500;">${med.company}</td>
                     <td style="padding: 12px; color:#64748b;">${med.rack}</td>
+                    <td style="padding: 12px; color:#64748b; font-weight:500;">${med.expiry}</td>
                     <td style="padding: 12px; font-weight:600; color:${med.qty < 50 ? '#ef4444' : '#22c55e'}">${med.qty} Pcs</td>
                     <td style="padding: 12px;">Rs. ${med.price.toFixed(2)}</td>
                     <td style="padding: 12px;">${badge}</td>
@@ -402,7 +433,7 @@
             medicineDatabase.forEach(med => {
                 let opt = document.createElement('option');
                 opt.value = med.id;
-                opt.innerText = `${med.name} (Available: ${med.qty} | Rs.${med.price})`;
+                opt.innerText = `${med.name} - ${med.company} (Exp: ${med.expiry} | Stock: ${med.qty} | Rs.${med.price})`;
                 posSelectDropdown.appendChild(opt);
             });
 
@@ -410,24 +441,34 @@
             totalMedCount.innerText = medicineDatabase.length;
         }
 
-        // Add New Medicine Logic
+        // Live Search Input Listener Event
+        inventorySearchInput.addEventListener('input', (e) => {
+            updateSystemUI(e.target.value);
+        });
+
+        // Add New Medicine Logic (includes Company & Expiry fields)
         document.getElementById('add-medicine-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const name = document.getElementById('med-name').value;
+            const company = document.getElementById('med-company').value;
             const rack = document.getElementById('med-rack').value || 'General';
+            const expiry = document.getElementById('med-expiry').value;
             const qty = parseInt(document.getElementById('med-qty').value);
             const price = parseFloat(document.getElementById('med-price').value);
 
             const newProduct = {
-                id: Date.now(), // Unique ID generation
+                id: Date.now(),
                 name: name,
+                company: company,
                 rack: rack,
+                expiry: expiry,
                 qty: qty,
                 price: price
             };
 
             medicineDatabase.push(newProduct);
             document.getElementById('add-medicine-form').reset();
+            inventorySearchInput.value = ''; // Reset search input
             updateSystemUI();
         });
 
@@ -455,7 +496,6 @@
                 return;
             }
 
-            // Check if item already exists in cart
             const cartItem = shoppingCart.find(item => item.id === selectedId);
             if(cartItem) {
                 if((cartItem.qty + inputQty) > dbProduct.qty) {
@@ -512,18 +552,17 @@
                 return;
             }
 
-            // Deduct quantities from Main Database array
             shoppingCart.forEach(cartItem => {
                 const dbItem = medicineDatabase.find(m => m.id === cartItem.id);
                 if(dbItem) {
-                    dbItem.qty -= cartItem.qty; // Deduct stock
+                    dbItem.qty -= cartItem.qty;
                 }
             });
 
             alert("Invoice Printed Successfully! Stock updated.");
-            shoppingCart = []; // Clear the cart array
+            shoppingCart = [];
             renderCartUI();
-            updateSystemUI(); // Refresh overall system lists
+            updateSystemUI();
         });
 
         // Boot system database logic on start
