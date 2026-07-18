@@ -96,13 +96,13 @@
                 
                 <!-- 1. DASHBOARD VIEW -->
                 <div id="view-dashboard" class="page-view active-view">
-                    <!-- Main Stats Grid -->
+                    <!-- Dynamic Main Stats Grid -->
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-icon icon-blue"><i class="fa-solid fa-box-archive"></i></div>
                             <div class="stat-data">
                                 <span class="stat-title">Total SKUs</span>
-                                <h2 class="stat-value">1,240</h2>
+                                <h2 class="stat-value" id="dash-total-skus">0</h2>
                                 <span class="stat-desc">Unique Medicines</span>
                             </div>
                         </div>
@@ -110,24 +110,24 @@
                             <div class="stat-icon icon-green"><i class="fa-solid fa-cash-register"></i></div>
                             <div class="stat-data">
                                 <span class="stat-title">Today's Revenue</span>
-                                <h2 class="stat-value">Rs 24,500</h2>
-                                <span class="stat-desc">+12.5% vs Yesterday</span>
+                                <h2 class="stat-value" id="dash-revenue">Rs. 0.00</h2>
+                                <span class="stat-desc">From Live POS Sales</span>
                             </div>
                         </div>
                         <div class="stat-card alert-card">
                             <div class="stat-icon icon-red"><i class="fa-solid fa-heart-circle-exclamation"></i></div>
                             <div class="stat-data">
                                 <span class="stat-title">Critical Stock</span>
-                                <h2 class="stat-value">12</h2>
-                                <span class="stat-desc">Needs Immediate Restock</span>
+                                <h2 class="stat-value" id="dash-critical-stock">0</h2>
+                                <span class="stat-desc">Stock Below 50 Pcs</span>
                             </div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon icon-purple"><i class="fa-solid fa-clock-rotate-left"></i></div>
                             <div class="stat-data">
                                 <span class="stat-title">Expiring Soon</span>
-                                <h2 class="stat-value">7</h2>
-                                <span class="stat-desc">Within 30 Days</span>
+                                <h2 class="stat-value" id="dash-expiring-soon">0</h2>
+                                <span class="stat-desc">Within Next 6 Months</span>
                             </div>
                         </div>
                     </div>
@@ -377,7 +377,7 @@
         // CORE APPLICATION DATABASE & LOGIC
         // ==========================================
         
-        // Global Master Database Array (Added company and expiry properties)
+        // Global Master Database Array (Initial items)
         let medicineDatabase = [
             { id: 1, name: 'Panadol 500mg', company: 'GSK', rack: 'Rack A-3', qty: 40, price: 3.50, expiry: '2028-12' },
             { id: 2, name: 'Augmentin 625mg', company: 'GSK', rack: 'Refrigerator', qty: 180, price: 45.00, expiry: '2027-06' },
@@ -385,6 +385,7 @@
         ];
 
         let shoppingCart = [];
+        let totalSalesRevenue = 0; // Total money made today
 
         // UI Rendering Elements
         const inventoryTableBody = document.getElementById('inventory-table-body');
@@ -394,17 +395,44 @@
         const billTotalAmount = document.getElementById('bill-total-amount');
         const inventorySearchInput = document.getElementById('inventory-search');
 
-        // Function to render layout data everywhere (with optional search filter)
+        // Function to render layout data everywhere
         function updateSystemUI(filterKeyword = '') {
-            inventoryTableBody.innerHTML = '';
             
-            // Convert filter keyword to lowercase for flawless match
+            // ---- 1. DYNAMIC DASHBOARD CALCULATIONS ----
+            let criticalCount = 0;
+            let expiringCount = 0;
+            
+            let today = new Date();
+            let sixMonthsLater = new Date();
+            sixMonthsLater.setMonth(today.getMonth() + 6);
+
+            medicineDatabase.forEach(med => {
+                // Stock Check
+                if (med.qty < 50) criticalCount++;
+
+                // Expiry Date Check
+                if (med.expiry) {
+                    let medExpDate = new Date(med.expiry + "-01");
+                    if (medExpDate >= today && medExpDate <= sixMonthsLater) {
+                        expiringCount++;
+                    }
+                }
+            });
+
+            // Updating Dashboard Values instantly
+            document.getElementById('dash-total-skus').innerText = medicineDatabase.length;
+            document.getElementById('dash-critical-stock').innerText = criticalCount;
+            document.getElementById('dash-expiring-soon').innerText = expiringCount;
+            document.getElementById('dash-revenue').innerText = "Rs. " + totalSalesRevenue.toFixed(2);
+            // ------------------------------------------
+
+            // ---- 2. RENDER INVENTORY TABLE ----
+            inventoryTableBody.innerHTML = '';
             let cleanKeyword = filterKeyword.toLowerCase().trim();
 
             medicineDatabase.forEach((med) => {
-                // Search condition matching both name and company name
                 if (cleanKeyword !== '' && !med.name.toLowerCase().includes(cleanKeyword) && !med.company.toLowerCase().includes(cleanKeyword)) {
-                    return; // Skip item if it doesn't match search
+                    return; // Skip if search doesn't match
                 }
 
                 let badge = med.qty < 50 ? 
@@ -428,7 +456,7 @@
                 inventoryTableBody.appendChild(row);
             });
 
-            // 2. Render POS Selection Dropdown
+            // ---- 3. RENDER POS DROPDOWN ----
             posSelectDropdown.innerHTML = '';
             medicineDatabase.forEach(med => {
                 let opt = document.createElement('option');
@@ -437,16 +465,16 @@
                 posSelectDropdown.appendChild(opt);
             });
 
-            // 3. Update Dashboard/Summary Counters
+            // 4. Update Sidebar/Inventory Badge Count
             totalMedCount.innerText = medicineDatabase.length;
         }
 
-        // Live Search Input Listener Event
+        // Live Search Input Listener
         inventorySearchInput.addEventListener('input', (e) => {
             updateSystemUI(e.target.value);
         });
 
-        // Add New Medicine Logic (includes Company & Expiry fields)
+        // Add New Medicine Logic
         document.getElementById('add-medicine-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const name = document.getElementById('med-name').value;
@@ -468,7 +496,7 @@
 
             medicineDatabase.push(newProduct);
             document.getElementById('add-medicine-form').reset();
-            inventorySearchInput.value = ''; // Reset search input
+            inventorySearchInput.value = ''; 
             updateSystemUI();
         });
 
@@ -552,20 +580,25 @@
                 return;
             }
 
+            let checkoutTotal = 0;
             shoppingCart.forEach(cartItem => {
                 const dbItem = medicineDatabase.find(m => m.id === cartItem.id);
                 if(dbItem) {
-                    dbItem.qty -= cartItem.qty;
+                    dbItem.qty -= cartItem.qty; // stock kam ho gaya
+                    checkoutTotal += cartItem.price * cartItem.qty;
                 }
             });
 
-            alert("Invoice Printed Successfully! Stock updated.");
+            // Dashboard Revenue update
+            totalSalesRevenue += checkoutTotal;
+
+            alert("Invoice Printed Successfully! Stock & Revenue updated.");
             shoppingCart = [];
             renderCartUI();
-            updateSystemUI();
+            updateSystemUI(); // pure system ko sync kar dega dashboard samet
         });
 
-        // Boot system database logic on start
+        // Initial system UI rendering on load
         updateSystemUI();
     </script>
 </body>
