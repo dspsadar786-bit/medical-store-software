@@ -33,6 +33,10 @@
         }
         .auth-btn:hover { background: #0369a1; }
 
+        /* Dashboard Interactive Cards */
+        .stat-card.clickable-card { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .stat-card.clickable-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+
         /* Dynamic Form Table Grid styling */
         .sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .data-card { background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
@@ -41,8 +45,9 @@
         .data-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 4px; }
-        .form-group input, .form-group select { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; }
+        .form-group input, .form-group select { width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
         .submit-btn { width: 100%; background: #0284c7; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .badge-alert { background: #fee2e2; color: #ef4444; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -104,31 +109,31 @@
                 <!-- 1. DASHBOARD VIEW -->
                 <div id="view-dashboard" class="page-view active-view">
                     <div class="stats-grid">
-                        <div class="stat-card">
+                        <div class="stat-card clickable-card" onclick="triggerMenu('view-inventory')">
                             <div class="stat-icon icon-blue"><i class="fa-solid fa-box-archive"></i></div>
                             <div class="stat-data">
                                 <span class="stat-title">Total SKUs</span>
                                 <h2 class="stat-value" id="dash-total-skus">0</h2>
                             </div>
                         </div>
-                        <div class="stat-card">
+                        <div class="stat-card clickable-card" onclick="triggerMenu('view-analytics')">
                             <div class="stat-icon icon-green"><i class="fa-solid fa-cash-register"></i></div>
                             <div class="stat-data">
                                 <span class="stat-title">Today's Revenue</span>
                                 <h2 class="stat-value" id="dash-revenue">Rs. 0.00</h2>
                             </div>
                         </div>
-                        <div class="stat-card alert-card">
+                        <div class="stat-card alert-card clickable-card" onclick="showDashboardFilteredList('critical')">
                             <div class="stat-icon icon-red"><i class="fa-solid fa-heart-circle-exclamation"></i></div>
                             <div class="stat-data">
                                 <span class="stat-title">Critical Stock</span>
                                 <h2 class="stat-value" id="dash-critical-stock">0</h2>
                             </div>
                         </div>
-                        <div class="stat-card">
+                        <div class="stat-card clickable-card" onclick="showDashboardFilteredList('expiring')">
                             <div class="stat-icon icon-purple"><i class="fa-solid fa-clock-rotate-left"></i></div>
                             <div class="stat-data">
-                                <span class="stat-title">Expiring Soon</span>
+                                <span class="stat-title">Expiring Soon (6M)</span>
                                 <h2 class="stat-value" id="dash-expiring-soon">0</h2>
                             </div>
                         </div>
@@ -155,21 +160,26 @@
                 <div id="view-inventory" class="page-view">
                     <div class="sub-grid">
                         <div class="data-card">
-                            <h3><i class="fa-solid fa-plus-circle"></i> Add Product</h3>
+                            <h3 id="form-inventory-title"><i class="fa-solid fa-plus-circle"></i> Add Product</h3>
                             <form id="add-medicine-form" style="margin-top:10px;">
+                                <input type="hidden" id="med-edit-id">
                                 <div class="form-group"><label>Medicine Name</label><input type="text" id="med-name" required></div>
                                 <div class="form-group"><label>Company Name</label><input type="text" id="med-company" required></div>
                                 <div class="form-group"><label>Rack Location</label><input type="text" id="med-rack" value="Rack A-1"></div>
                                 <div class="form-group"><label>Expiry Date</label><input type="month" id="med-expiry" required></div>
                                 <div class="form-group"><label>Stock Quantity</label><input type="number" id="med-qty" required></div>
                                 <div class="form-group"><label>Price (Rs)</label><input type="number" id="med-price" step="0.01" required></div>
-                                <button type="submit" class="submit-btn">Save to Inventory</button>
+                                <button type="submit" id="med-submit-btn" class="submit-btn">Save to Inventory</button>
+                                <button type="button" id="cancel-edit-btn" style="width:100%; background:#64748b; color:white; border:none; padding:8px; border-radius:6px; font-weight:600; cursor:pointer; margin-top:5px; display:none;">Cancel Edit</button>
                             </form>
                         </div>
                         <div class="data-card">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <h3>Stock Directory</h3>
-                                <input type="text" id="inventory-search" placeholder="Search..." style="padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px;">
+                                <div style="display:flex; gap:5px; align-items:center;">
+                                    <button id="clear-filter-btn" onclick="resetInventoryView()" style="display:none; font-size:11px; background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Show All</button>
+                                    <input type="text" id="inventory-search" placeholder="Search..." style="padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px;">
+                                </div>
                             </div>
                             <table class="data-table">
                                 <thead>
@@ -186,10 +196,22 @@
                     <div class="sub-grid">
                         <div class="data-card">
                             <h3>Retail Counter</h3>
-                            <div style="margin-top: 15px; display:flex; gap:10px; background:#f8fafc; padding:10px; border-radius:8px;">
-                                <div style="flex:2;"><label style="font-size:11px; font-weight:600;">Item</label><select id="pos-med-select" style="width:100%; padding:6px;"></select></div>
-                                <div style="flex:1;"><label style="font-size:11px; font-weight:600;">Qty</label><input type="number" id="pos-med-qty" value="1" min="1" style="width:100%; padding:6px;"></div>
-                                <div style="display:flex; align-items:flex-end;"><button id="add-to-cart-btn" style="background:#22c55e; color:white; border:none; padding:8px 12px; border-radius:6px; font-weight:600; cursor:pointer;">Add</button></div>
+                            <div style="margin-top: 15px; display:flex; flex-direction:column; gap:10px; background:#f8fafc; padding:12px; border-radius:8px;">
+                                <div style="display:flex; gap:10px;">
+                                    <div style="flex:2;">
+                                        <label style="font-size:11px; font-weight:600; color:#475569;">Search Medicine</label>
+                                        <input type="text" id="pos-search-input" placeholder="Type name to search..." style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                    </div>
+                                    <div style="flex:2;">
+                                        <label style="font-size:11px; font-weight:600; color:#475569;">Select Product</label>
+                                        <select id="pos-med-select" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; height:31px;"></select>
+                                    </div>
+                                    <div style="flex:1;">
+                                        <label style="font-size:11px; font-weight:600; color:#475569;">Qty</label>
+                                        <input type="number" id="pos-med-qty" value="1" min="1" style="width:100%; padding:5px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px;">
+                                    </div>
+                                </div>
+                                <button id="add-to-cart-btn" style="background:#22c55e; color:white; border:none; padding:8px; border-radius:6px; font-weight:600; cursor:pointer; width:100%;"><i class="fa-solid fa-plus"></i> Add Medicine to Cart</button>
                             </div>
                             <table class="data-table">
                                 <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Total</th><th>Cancel</th></tr></thead>
@@ -213,15 +235,18 @@
                             <h3>Record Bulk Stock Purchase</h3>
                             <form id="purchase-form" style="margin-top:10px;">
                                 <div class="form-group"><label>Supplier Name</label><input type="text" id="p-supplier" required></div>
-                                <div class="form-group"><label>Item Invoice Detail</label><input type="text" id="p-item" required></div>
-                                <div class="form-group"><label>Total Bill Amount (Rs)</label><input type="number" id="p-total" required></div>
-                                <button type="submit" class="submit-btn">Save Invoice</button>
+                                <div class="form-group"><label>Medicine/Item Name</label><input type="text" id="p-item" placeholder="e.g. Panadol Syrup" required></div>
+                                <div class="form-group"><label>Company Name</label><input type="text" id="p-company" placeholder="e.g. GSK" required></div>
+                                <div class="form-group"><label>Quantity Purchased</label><input type="number" id="p-qty" value="100" required></div>
+                                <div class="form-group"><label>Cost Price Per Piece (Rs)</label><input type="number" id="p-unit-price" step="0.01" value="10" required></div>
+                                <div class="form-group"><label>Total Bill Amount (Rs)</label><input type="number" id="p-total" readonly style="background:#f1f5f9;"></div>
+                                <button type="submit" class="submit-btn">Save Invoice & Link to Stock</button>
                             </form>
                         </div>
                         <div class="data-card">
                             <h3>Purchase Order History</h3>
                             <table class="data-table">
-                                <thead><tr><th>Supplier</th><th>Details</th><th>Total Paid</th></tr></thead>
+                                <thead><tr><th>Supplier</th><th>Details</th><th>Qty</th><th>Total Paid</th></tr></thead>
                                 <tbody id="purchases-table-body"></tbody>
                             </table>
                         </div>
@@ -236,14 +261,16 @@
                             <form id="customer-form" style="margin-top:10px;">
                                 <div class="form-group"><label>Customer Name</label><input type="text" id="c-name" required></div>
                                 <div class="form-group"><label>Phone Number</label><input type="text" id="c-phone" required></div>
+                                <div class="form-group"><label>Purchased Medicine Name</label><input type="text" id="c-med-name" placeholder="e.g. Augmentin 250mg" required></div>
+                                <div class="form-group"><label>Purchasing Date</label><input type="date" id="c-date" required></div>
                                 <div class="form-group"><label>Outstanding Balance (Rs)</label><input type="number" id="c-balance" value="0"></div>
-                                <button type="submit" class="submit-btn">Add Customer</button>
+                                <button type="submit" class="submit-btn">Add Customer Account</button>
                             </form>
                         </div>
                         <div class="data-card">
                             <h3>Customer Registry Ledger</h3>
                             <table class="data-table">
-                                <thead><tr><th>Name</th><th>Phone</th><th>Balance</th></tr></thead>
+                                <thead><tr><th>Name</th><th>Phone</th><th>Medicine</th><th>Date</th><th>Balance</th></tr></thead>
                                 <tbody id="customers-table-body"></tbody>
                             </table>
                         </div>
@@ -322,7 +349,7 @@
 
             </div>
             <footer class="app-footer">
-                <span>The Medicine Point v3.5.2 | Licensed to [Pharmacy Name]</span>
+                <span>The Medicine Point v4.0.0 | Licensed to [Pharmacy Name]</span>
                 <span>Powered by Healthcare Analytics © 2026</span>
             </footer>
         </main>
@@ -345,6 +372,8 @@
             if(userInput === 'admin' && passInput === currentAdminPassword) {
                 authScreen.style.display = 'none';
                 appWorkspace.style.display = 'flex';
+                // Set default date to today in customer screen
+                document.getElementById('c-date').value = new Date().toISOString().split('T')[0];
                 updateSystemUI();
             } else {
                 alert('Oops! Invalid login details. Please try again.');
@@ -376,11 +405,12 @@
         });
 
         function triggerMenu(id) {
+            resetInventoryView();
             const btn = document.querySelector(`[data-target="${id}"]`);
             if(btn) btn.click();
         }
 
-        // --- SAMPLE DATA REMOVED (NOW COMPLETELY EMPTY ON START) ---
+        // DATABASE STATE (INITIALIZED EMPTY AS REQUESTED)
         let medicineDatabase = [];
         let purchasesData = [];
         let customersData = [];
@@ -388,39 +418,62 @@
         let shoppingCart = [];
         let totalSalesRevenue = 0;
         let totalPurchaseExpense = 0;
+        
+        // Active global filter flag for dashboard redirection
+        let activeInventoryFilter = 'all'; 
 
         // DYNAMIC RENDERING SYSTEM ENGINE
         function updateSystemUI(filterKeyword = '') {
             let criticalCount = 0;
             let expiringCount = 0;
             
-            let today = new Date(2026, 6, 18); 
-            let oneMonthLimit = new Date(2026, 7, 31); 
+            // Expiry Evaluation Setup (6 Months Limit from today July 2026 -> January 2027)
+            let sixMonthsLimit = new Date(2027, 0, 31); // Jan 31, 2027
 
             document.getElementById('inventory-table-body').innerHTML = '';
             let searchKey = filterKeyword.toLowerCase().trim();
 
             medicineDatabase.forEach(med => {
-                if(med.qty < 50) criticalCount++;
+                let isCritical = med.qty < 50;
+                if(isCritical) criticalCount++;
 
+                let isExpiringSoon = false;
                 if(med.expiry) {
                     let parts = med.expiry.split('-');
                     let expYear = parseInt(parts[0]);
                     let expMonth = parseInt(parts[1]) - 1;
                     let medDate = new Date(expYear, expMonth, 1);
 
-                    if(medDate <= oneMonthLimit) {
+                    if(medDate <= sixMonthsLimit) {
+                        isExpiringSoon = true;
                         expiringCount++;
                     }
                 }
 
-                if(searchKey === '' || med.name.toLowerCase().includes(searchKey) || med.company.toLowerCase().includes(searchKey)) {
+                // Check active dashboard filters or keyword search
+                let matchesFilter = true;
+                if(activeInventoryFilter === 'critical' && !isCritical) matchesFilter = false;
+                if(activeInventoryFilter === 'expiring' && !isExpiringSoon) matchesFilter = false;
+
+                let matchesSearch = searchKey === '' || med.name.toLowerCase().includes(searchKey) || med.company.toLowerCase().includes(searchKey);
+
+                if(matchesFilter && matchesSearch) {
                     let tr = document.createElement('tr');
-                    tr.innerHTML = `<td><b>${med.name}</b></td><td>${med.company}</td><td>${med.expiry}</td><td style="color:${med.qty < 50 ? '#ef4444':'#22c55e'}">${med.qty} Pcs</td><td>Rs. ${med.price}</td><td><button onclick="deleteMedicine(${med.id})" style="color:#ef4444; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button></td>`;
+                    tr.innerHTML = `
+                        <td><b>${med.name}</b> ${isExpiringSoon ? '<span class="badge-alert">Expiring</span>':''}</td>
+                        <td>${med.company}</td>
+                        <td>${med.expiry}</td>
+                        <td style="color:${isCritical ? '#ef4444':'#22c55e'}">${med.qty} Pcs</td>
+                        <td>Rs. ${med.price}</td>
+                        <td>
+                            <button onclick="editMedicine(${med.id})" style="color:#0284c7; border:none; background:none; cursor:pointer; margin-right:8px;" title="Edit Product"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteMedicine(${med.id})" style="color:#ef4444; border:none; background:none; cursor:pointer;" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        </td>`;
                     document.getElementById('inventory-table-body').appendChild(tr);
                 }
             });
 
+            // Counters assignment
             document.getElementById('dash-total-skus').innerText = medicineDatabase.length;
             document.getElementById('dash-critical-stock').innerText = criticalCount;
             document.getElementById('dash-expiring-soon').innerText = expiringCount;
@@ -428,29 +481,67 @@
             document.getElementById('report-sales').innerText = "Rs. " + totalSalesRevenue.toFixed(2);
             document.getElementById('report-expense').innerText = "Rs. " + totalPurchaseExpense.toFixed(2);
 
+            // Re-render POS Select Box options
+            renderPosSelectOptions();
+            renderModuleTables();
+        }
+
+        // Live filtration logic for POS Search box
+        document.getElementById('pos-search-input').addEventListener('input', (e) => {
+            renderPosSelectOptions(e.target.value);
+        });
+
+        function renderPosSelectOptions(searchKeyword = '') {
             const posDropdown = document.getElementById('pos-med-select');
             posDropdown.innerHTML = '';
-            medicineDatabase.forEach(med => {
+            let key = searchKeyword.toLowerCase().trim();
+            
+            let filtered = medicineDatabase.filter(med => 
+                key === '' || med.name.toLowerCase().includes(key)
+            );
+
+            if(filtered.length === 0) {
+                let op = document.createElement('option');
+                op.value = "";
+                op.innerText = "No medicine found";
+                posDropdown.appendChild(op);
+                return;
+            }
+
+            filtered.forEach(med => {
                 let op = document.createElement('option');
                 op.value = med.id;
-                op.innerText = `${med.name} (Stock: ${med.qty})`;
+                op.innerText = `${med.name} (Stock: ${med.qty} | Rs. ${med.price})`;
                 posDropdown.appendChild(op);
             });
+        }
 
-            renderModuleTables();
+        function showDashboardFilteredList(type) {
+            activeInventoryFilter = type;
+            document.getElementById('clear-filter-btn').style.display = 'inline-block';
+            triggerMenu('view-inventory');
+            if(type === 'critical') mainTitle.innerText = "Inventory Management (Critical Stock)";
+            if(type === 'expiring') mainTitle.innerText = "Inventory Management (Expiring Stock)";
+        }
+
+        function resetInventoryView() {
+            activeInventoryFilter = 'all';
+            document.getElementById('clear-filter-btn').style.display = 'none';
+            document.getElementById('inventory-search').value = '';
+            updateSystemUI();
         }
 
         function renderModuleTables() {
             const pTable = document.getElementById('purchases-table-body');
             pTable.innerHTML = '';
             purchasesData.forEach(p => {
-                pTable.innerHTML += `<tr><td>${p.supplier}</td><td>${p.item}</td><td>Rs. ${p.total}</td></tr>`;
+                pTable.innerHTML += `<tr><td>${p.supplier}</td><td><b>${p.item}</b> (${p.company})</td><td>${p.qty} Pcs</td><td>Rs. ${p.total}</td></tr>`;
             });
 
             const cTable = document.getElementById('customers-table-body');
             cTable.innerHTML = '';
             customersData.forEach(c => {
-                cTable.innerHTML += `<tr><td><b>${c.name}</b></td><td>${c.phone}</td><td>Rs. ${c.balance}</td></tr>`;
+                cTable.innerHTML += `<tr><td><b>${c.name}</b></td><td>${c.phone}</td><td>${c.medicine}</td><td>${c.date}</td><td>Rs. ${c.balance}</td></tr>`;
             });
 
             const sTable = document.getElementById('suppliers-table-body');
@@ -460,41 +551,116 @@
             });
         }
 
-        // EVENT LISTENERS
+        // AUTO-CALCULATE PURCHASES TOTAL BILL LIVE
+        const pQtyInput = document.getElementById('p-qty');
+        const pPriceInput = document.getElementById('p-unit-price');
+        const pTotalInput = document.getElementById('p-total');
+        
+        function calcPurchaseTotal() {
+            let q = parseInt(pQtyInput.value || 0);
+            let p = parseFloat(pPriceInput.value || 0);
+            pTotalInput.value = (q * p).toFixed(2);
+        }
+        pQtyInput.addEventListener('input', calcPurchaseTotal);
+        pPriceInput.addEventListener('input', calcPurchaseTotal);
+        calcPurchaseTotal();
+
+        // EVENT LISTENERS FOR SEARCH IN INVENTORY
         document.getElementById('inventory-search').addEventListener('input', (e) => updateSystemUI(e.target.value));
 
+        // EDIT MEDICINE OPERATION ENGINE
+        function editMedicine(id) {
+            const item = medicineDatabase.find(m => m.id === id);
+            if(!item) return;
+
+            document.getElementById('med-edit-id').value = item.id;
+            document.getElementById('med-name').value = item.name;
+            document.getElementById('med-company').value = item.company;
+            document.getElementById('med-rack').value = item.rack;
+            document.getElementById('med-expiry').value = item.expiry;
+            document.getElementById('med-qty').value = item.qty;
+            document.getElementById('med-price').value = item.price;
+
+            document.getElementById('form-inventory-title').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Edit Product`;
+            document.getElementById('med-submit-btn').innerText = "Update Product";
+            document.getElementById('cancel-edit-btn').style.display = 'block';
+            
+            // Scroll smoothly to form view top
+            document.getElementById('add-medicine-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('cancel-edit-btn').addEventListener('click', () => {
+            clearInventoryForm();
+        });
+
+        function clearInventoryForm() {
+            document.getElementById('add-medicine-form').reset();
+            document.getElementById('med-edit-id').value = '';
+            document.getElementById('med-rack').value = 'Rack A-1';
+            document.getElementById('form-inventory-title').innerHTML = `<i class="fa-solid fa-plus-circle"></i> Add Product`;
+            document.getElementById('med-submit-btn').innerText = "Save to Inventory";
+            document.getElementById('cancel-edit-btn').style.display = 'none';
+        }
+
+        // SAVE / UPDATE MEDICINE
         document.getElementById('add-medicine-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            medicineDatabase.push({
-                id: Date.now(),
+            let editId = document.getElementById('med-edit-id').value;
+
+            let medData = {
                 name: document.getElementById('med-name').value,
                 company: document.getElementById('med-company').value,
                 rack: document.getElementById('med-rack').value,
                 expiry: document.getElementById('med-expiry').value,
                 qty: parseInt(document.getElementById('med-qty').value),
                 price: parseFloat(document.getElementById('med-price').value)
-            });
-            document.getElementById('add-medicine-form').reset();
+            };
+
+            if(editId) {
+                // UPDATE EXISITING
+                let idx = medicineDatabase.findIndex(m => m.id == editId);
+                if(idx !== -1) {
+                    medData.id = parseInt(editId);
+                    medicineDatabase[idx] = medData;
+                    alert("Medicine updated successfully!");
+                }
+            } else {
+                // INSERT NEW
+                medData.id = Date.now();
+                medicineDatabase.push(medData);
+                alert("Medicine saved to stock directory.");
+            }
+            
+            clearInventoryForm();
             updateSystemUI();
         });
 
         function deleteMedicine(id) {
-            medicineDatabase = medicineDatabase.filter(m => m.id !== id);
-            updateSystemUI();
+            if(confirm("Are you sure you want to completely remove this medicine?")) {
+                medicineDatabase = medicineDatabase.filter(m => m.id !== id);
+                updateSystemUI();
+            }
         }
 
         // POS CORE OPERATIONS
         document.getElementById('add-to-cart-btn').addEventListener('click', () => {
             const id = parseInt(document.getElementById('pos-med-select').value);
             const qty = parseInt(document.getElementById('pos-med-qty').value);
-            if(!id) { alert("Pehle inventory main medicine add karein!"); return; }
+            if(!id) { alert("Pehle list se medicine product select ya search karein!"); return; }
             const item = medicineDatabase.find(m => m.id === id);
             
-            if(!item || qty > item.qty) { alert("Stock limit exceeded!"); return; }
+            if(!item || qty > item.qty) { alert("Stock limit exceeded! Selected quantity is unavailable."); return; }
             
             let cartItem = shoppingCart.find(c => c.id === id);
-            if(cartItem) { cartItem.qty += qty; } 
+            if(cartItem) { 
+                if((cartItem.qty + qty) > item.qty) { alert("Cannot add more! Stock limit crossed."); return; }
+                cartItem.qty += qty; 
+            } 
             else { shoppingCart.push({ id: item.id, name: item.name, price: item.price, qty: qty }); }
+            
+            // Clear POS Search input & reset dropdown selection state
+            document.getElementById('pos-search-input').value = '';
+            renderPosSelectOptions();
             renderCart();
         });
 
@@ -504,7 +670,7 @@
             let total = 0;
             shoppingCart.forEach((c, idx) => {
                 total += c.price * c.qty;
-                body.innerHTML += `<tr><td>${c.name}</td><td>Rs. ${c.price}</td><td>${c.qty}</td><td>Rs. ${c.price * c.qty}</td><td><button onclick="removeCart(${idx})" style="color:#ef4444; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button></td></tr>`;
+                body.innerHTML += `<tr><td>${c.name}</td><td>Rs. ${c.price}</td><td>${c.qty}</td><td>Rs. ${(c.price * c.qty).toFixed(2)}</td><td><button onclick="removeCart(${idx})" style="color:#ef4444; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button></td></tr>`;
             });
             document.getElementById('bill-total-amount').innerText = total.toFixed(2);
         }
@@ -525,21 +691,64 @@
             alert("Invoice generated and stock updated successfully!");
         });
 
-        // FORMS DATA HANDLING
+        // CONNECTED PURCHASE FORM - AUTOMATIC INVENTORY LINKING
         document.getElementById('purchase-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            let pItemName = document.getElementById('p-item').value;
+            let pCompanyName = document.getElementById('p-company').value;
+            let pQtyValue = parseInt(document.getElementById('p-qty').value);
+            let pCostPrice = parseFloat(document.getElementById('p-unit-price').value);
             let val = parseFloat(document.getElementById('p-total').value);
-            purchasesData.push({ supplier: document.getElementById('p-supplier').value, item: document.getElementById('p-item').value, total: val });
+
+            // Save to Purchase Order History
+            purchasesData.push({ 
+                supplier: document.getElementById('p-supplier').value, 
+                item: pItemName, 
+                company: pCompanyName,
+                qty: pQtyValue,
+                total: val 
+            });
             totalPurchaseExpense += val;
+
+            // --- LINKED ACTION: AUTOMATICALLY SEND/UPDATE INVENTORY ---
+            // Check if item already exists in database
+            let existingMed = medicineDatabase.find(m => m.name.toLowerCase() === pItemName.toLowerCase());
+            
+            if(existingMed) {
+                existingMed.qty += pQtyValue; // update stock automatically
+            } else {
+                // Append as a new item structure to inventory database automatically
+                medicineDatabase.push({
+                    id: Date.now(),
+                    name: pItemName,
+                    company: pCompanyName,
+                    rack: "Rack A-1",
+                    expiry: new Date(2027, 6).toISOString().substring(0, 7), // Future dummy expiry to configure later
+                    qty: pQtyValue,
+                    price: parseFloat((pCostPrice * 1.2).toFixed(2)) // Auto retail pricing structure with 20% standard margin
+                });
+            }
+
             document.getElementById('purchase-form').reset();
+            calcPurchaseTotal();
             updateSystemUI();
+            alert("Purchase order successfully locked! Item automatically transferred to Inventory stock repository.");
         });
 
+        // CUSTOMERS FORM DATA HANDLING WITH NEW FIELDS
         document.getElementById('customer-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            customersData.push({ name: document.getElementById('c-name').value, phone: document.getElementById('c-phone').value, balance: parseFloat(document.getElementById('c-balance').value || 0) });
+            customersData.push({ 
+                name: document.getElementById('c-name').value, 
+                phone: document.getElementById('c-phone').value, 
+                medicine: document.getElementById('c-med-name').value,
+                date: document.getElementById('c-date').value,
+                balance: parseFloat(document.getElementById('c-balance').value || 0) 
+            });
             document.getElementById('customer-form').reset();
+            document.getElementById('c-date').value = new Date().toISOString().split('T')[0];
             updateSystemUI();
+            alert("Customer account registry updated successfully.");
         });
 
         document.getElementById('supplier-form').addEventListener('submit', (e) => {
@@ -547,9 +756,10 @@
             suppliersData.push({ name: document.getElementById('s-name').value, phone: document.getElementById('s-phone').value, city: document.getElementById('s-city').value });
             document.getElementById('supplier-form').reset();
             updateSystemUI();
+            alert("Wholesale Vendor registered.");
         });
 
-        // FIXED PASSWORD CHANGE ACTION
+        // PASSWORD CHANGE ACTION
         document.getElementById('change-password-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const newPass = document.getElementById('new-sys-password').value.trim();
@@ -559,7 +769,7 @@
             }
             currentAdminPassword = newPass; 
             document.getElementById('change-password-form').reset();
-            alert("Success! Admin password successfully updated. Ab aap logout karke check kar sakte hain.");
+            alert("Success! Admin password successfully updated.");
         });
 
     </script>
