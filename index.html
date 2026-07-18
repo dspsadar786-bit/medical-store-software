@@ -290,35 +290,37 @@
                     </div>
                 </div>
 
-               <!-- 8. SETTINGS VIEW -->
-<div id="view-settings" class="page-view">
-    <div class="data-card">
-        <h3>Application Configuration</h3><br>
-        <div class="form-group" style="max-width:300px;">
-            <label>Pharmacy Display Title</label>
-            <input type="text" value="The Medicine Point" readonly style="background:#f1f5f9;">
-        </div>
-        <div class="form-group" style="max-width:300px;">
-            <label>System Currency</label>
-            <input type="text" value="PKR (Rs.)" readonly style="background:#f1f5f9;">
-        </div>
-        
-        <!-- Password Change Box -->
-        <div style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed #e2e8f0; max-width: 300px;">
-            <h4 style="color: #0f172a; margin-bottom: 10px;"><i class="fa-solid fa-lock" style="color: #0284c7;"></i> Change Admin Password</h4>
-            <form id="change-password-form">
-                <div class="form-group">
-                    <label>New Password</label>
-                    <input type="password" id="new-sys-password" placeholder="Enter new password" required style="width:100%; padding:8px;">
+                <!-- 8. SETTINGS VIEW -->
+                <div id="view-settings" class="page-view">
+                    <div class="data-card">
+                        <h3>Application Configuration</h3><br>
+                        <div class="form-group" style="max-width:300px;">
+                            <label>Pharmacy Display Title</label>
+                            <input type="text" value="The Medicine Point" readonly style="background:#f1f5f9;">
+                        </div>
+                        <div class="form-group" style="max-width:300px;">
+                            <label>System Currency</label>
+                            <input type="text" value="PKR (Rs.)" readonly style="background:#f1f5f9;">
+                        </div>
+                        
+                        <!-- Password Change Box -->
+                        <div style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed #e2e8f0; max-width: 300px;">
+                            <h4 style="color: #0f172a; margin-bottom: 10px;"><i class="fa-solid fa-lock" style="color: #0284c7;"></i> Change Admin Password</h4>
+                            <form id="change-password-form">
+                                <div class="form-group">
+                                    <label>New Password</label>
+                                    <input type="password" id="new-sys-password" placeholder="Enter new password" required style="width:100%; padding:8px;">
+                                </div>
+                                <button type="submit" class="submit-btn" style="background:#0f172a;">Update Password</button>
+                            </form>
+                        </div>
+                        
+                        <br>
+                        <p style="color:#64748b; font-size:12px;"><i class="fa-solid fa-circle-info"></i> Security updates and terminal connection configurations are managed automatically.</p>
+                    </div>
                 </div>
-                <button type="submit" class="submit-btn" style="background:#0f172a;">Update Password</button>
-            </form>
-        </div>
-        
-        <br>
-        <p style="color:#64748b; font-size:12px;"><i class="fa-solid fa-circle-info"></i> Security updates and terminal connection configurations are managed automatically.</p>
-    </div>
-</div>
+
+            </div>
             <footer class="app-footer">
                 <span>The Medicine Point v3.5.2 | Licensed to [Pharmacy Name]</span>
                 <span>Powered by Healthcare Analytics © 2026</span>
@@ -327,13 +329,17 @@
     </div>
 
     <script>
+        // GLOBAL VARIABLE FOR ADMIN PASSWORD
+        let currentAdminPassword = 'admin123';
+
         // AUTH LOGIC
         const authScreen = document.getElementById('auth-screen');
         const appWorkspace = document.getElementById('app-workspace');
         
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            if(document.getElementById('username').value === 'admin' && document.getElementById('password').value === 'admin123') {
+            // Checking password dynamically via variable
+            if(document.getElementById('username').value === 'admin' && document.getElementById('password').value === currentAdminPassword) {
                 authScreen.style.display = 'none';
                 appWorkspace.style.display = 'flex';
                 updateSystemUI();
@@ -388,9 +394,9 @@
             let criticalCount = 0;
             let expiringCount = 0;
             
-            // SYSTEM CURRENT REAL-TIME DATETIME CALCULATION (July 2026 Context)
-            let today = new Date(2026, 6, 18); // Current Month July 2026
-            let oneMonthLimit = new Date(2026, 7, 31); // End of next month August 2026
+            // SYSTEM CURRENT REAL-TIME DATETIME CALCULATION
+            let today = new Date(2026, 6, 18); 
+            let oneMonthLimit = new Date(2026, 7, 31); 
 
             // Inventory & Expiry Logic Loops
             document.getElementById('inventory-table-body').innerHTML = '';
@@ -405,14 +411,12 @@
                     let expMonth = parseInt(parts[1]) - 1;
                     let medDate = new Date(expYear, expMonth, 1);
 
-                    // Alert triggers only if medicine is expiring in <= 30 days time frame
                     if(medDate <= oneMonthLimit) {
                         expiringCount++;
                     }
                 }
 
                 if(searchKey === '' || med.name.toLowerCase().includes(searchKey) || med.company.toLowerCase().includes(searchKey)) {
-                    let badge = med.qty < 50 ? `<span style="color:#ef4444; font-weight:600;">Low</span>` : `<span style="color:#22c55e;">OK</span>`;
                     let tr = document.createElement('tr');
                     tr.innerHTML = `<td><b>${med.name}</b></td><td>${med.company}</td><td>${med.expiry}</td><td style="color:${med.qty < 50 ? '#ef4444':'#22c55e'}">${med.qty} Pcs</td><td>Rs. ${med.price}</td><td><button onclick="deleteMedicine(${med.id})" style="color:#ef4444; border:none; background:none; cursor:pointer;"><i class="fa-solid fa-trash"></i></button></td>`;
                     document.getElementById('inventory-table-body').appendChild(tr);
@@ -464,7 +468,7 @@
             });
         }
 
-        // EVENT EVENT LISTENERS
+        // EVENT LISTENERS
         document.getElementById('inventory-search').addEventListener('input', (e) => updateSystemUI(e.target.value));
 
         document.getElementById('add-medicine-form').addEventListener('submit', (e) => {
@@ -551,6 +555,20 @@
             document.getElementById('supplier-form').reset();
             updateSystemUI();
         });
+
+        // PASSWORD CHANGE LISTENER
+        document.getElementById('change-password-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newPass = document.getElementById('new-sys-password').value.trim();
+            if(newPass.length < 4) {
+                alert("Password kam az kam 4 characters ka hona chahiye!");
+                return;
+            }
+            currentAdminPassword = newPass; 
+            document.getElementById('change-password-form').reset();
+            alert("Success! Admin password successfully updated. Agli dafa se yeh naya password chalega.");
+        });
+
     </script>
 </body>
 </html>
