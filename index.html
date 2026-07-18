@@ -290,23 +290,35 @@
                     </div>
                 </div>
 
-                <!-- 8. SETTINGS VIEW -->
-                <div id="view-settings" class="page-view">
-                    <div class="data-card">
-                        <h3>Application Configuration</h3><br>
-                        <div class="form-group" style="max-width:300px;">
-                            <label>Pharmacy Display Title</label>
-                            <input type="text" value="The Medicine Point" readonly style="background:#f1f5f9;">
-                        </div>
-                        <div class="form-group" style="max-width:300px;">
-                            <label>System Currency</label>
-                            <input type="text" value="PKR (Rs.)" readonly style="background:#f1f5f9;">
-                        </div>
-                        <p style="color:#64748b; font-size:12px;"><i class="fa-solid fa-circle-info"></i> Security updates and terminal connection configurations are managed automatically.</p>
-                    </div>
+               <!-- 8. SETTINGS VIEW -->
+<div id="view-settings" class="page-view">
+    <div class="data-card">
+        <h3>Application Configuration</h3><br>
+        <div class="form-group" style="max-width:300px;">
+            <label>Pharmacy Display Title</label>
+            <input type="text" value="The Medicine Point" readonly style="background:#f1f5f9;">
+        </div>
+        <div class="form-group" style="max-width:300px;">
+            <label>System Currency</label>
+            <input type="text" value="PKR (Rs.)" readonly style="background:#f1f5f9;">
+        </div>
+        
+        <!-- Password Change Box -->
+        <div style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed #e2e8f0; max-width: 300px;">
+            <h4 style="color: #0f172a; margin-bottom: 10px;"><i class="fa-solid fa-lock" style="color: #0284c7;"></i> Change Admin Password</h4>
+            <form id="change-password-form">
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="new-sys-password" placeholder="Enter new password" required style="width:100%; padding:8px;">
                 </div>
-
-            </div>
+                <button type="submit" class="submit-btn" style="background:#0f172a;">Update Password</button>
+            </form>
+        </div>
+        
+        <br>
+        <p style="color:#64748b; font-size:12px;"><i class="fa-solid fa-circle-info"></i> Security updates and terminal connection configurations are managed automatically.</p>
+    </div>
+</div>
             <footer class="app-footer">
                 <span>The Medicine Point v3.5.2 | Licensed to [Pharmacy Name]</span>
                 <span>Powered by Healthcare Analytics © 2026</span>
