@@ -55,7 +55,7 @@
             <p>Sign in to manage your pharmacy account</p>
             <form id="login-form">
                 <input type="text" id="username" class="auth-input" placeholder="Username (Default: admin)" required>
-                <input type="password" id="password" class="auth-input" placeholder="Password (Default: admin123)" required>
+                <input type="password" id="password" class="auth-input" placeholder="Password" required>
                 <button type="submit" class="auth-btn">Sign In</button>
             </form>
         </div>
@@ -332,14 +332,17 @@
         // GLOBAL VARIABLE FOR ADMIN PASSWORD
         let currentAdminPassword = 'admin123';
 
-        // AUTH LOGIC
+        // AUTH LOGIC WITH STABLE EVALUATION
         const authScreen = document.getElementById('auth-screen');
         const appWorkspace = document.getElementById('app-workspace');
         
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            // Checking password dynamically via variable
-            if(document.getElementById('username').value === 'admin' && document.getElementById('password').value === currentAdminPassword) {
+            
+            const userInput = document.getElementById('username').value.trim();
+            const passInput = document.getElementById('password').value.trim();
+
+            if(userInput === 'admin' && passInput === currentAdminPassword) {
                 authScreen.style.display = 'none';
                 appWorkspace.style.display = 'flex';
                 updateSystemUI();
@@ -353,6 +356,7 @@
                 appWorkspace.style.display = 'none';
                 authScreen.style.display = 'flex';
                 document.getElementById('login-form').reset();
+                document.getElementById('password').value = ''; 
             }
         });
 
@@ -376,29 +380,23 @@
             if(btn) btn.click();
         }
 
-        // MASTER SIMULATED DATA
-        let medicineDatabase = [
-            { id: 1, name: 'Panadol 500mg', company: 'GSK', rack: 'Rack A-3', qty: 40, price: 3.50, expiry: '2026-08' },
-            { id: 2, name: 'Augmentin 625mg', company: 'GSK', rack: 'Refrigerator', qty: 180, price: 45.00, expiry: '2027-06' },
-            { id: 3, name: 'Surbex-Z Tablets', company: 'Abbott', rack: 'Rack D-4', qty: 120, price: 25.00, expiry: '2026-07' }
-        ];
-        let purchasesData = [{ supplier: 'Ali Distributors', item: 'Panadol Bulk Pack', total: 5000 }];
-        let customersData = [{ name: 'Muhammad Ahmed', phone: '03001234567', balance: 450 }];
-        let suppliersData = [{ name: 'Ali Distributors', phone: '04235551212', city: 'Lahore' }];
+        // --- SAMPLE DATA REMOVED (NOW COMPLETELY EMPTY ON START) ---
+        let medicineDatabase = [];
+        let purchasesData = [];
+        let customersData = [];
+        let suppliersData = [];
         let shoppingCart = [];
         let totalSalesRevenue = 0;
-        let totalPurchaseExpense = 5000;
+        let totalPurchaseExpense = 0;
 
         // DYNAMIC RENDERING SYSTEM ENGINE
         function updateSystemUI(filterKeyword = '') {
             let criticalCount = 0;
             let expiringCount = 0;
             
-            // SYSTEM CURRENT REAL-TIME DATETIME CALCULATION
             let today = new Date(2026, 6, 18); 
             let oneMonthLimit = new Date(2026, 7, 31); 
 
-            // Inventory & Expiry Logic Loops
             document.getElementById('inventory-table-body').innerHTML = '';
             let searchKey = filterKeyword.toLowerCase().trim();
 
@@ -423,7 +421,6 @@
                 }
             });
 
-            // Sync Core Dashboard Components
             document.getElementById('dash-total-skus').innerText = medicineDatabase.length;
             document.getElementById('dash-critical-stock').innerText = criticalCount;
             document.getElementById('dash-expiring-soon').innerText = expiringCount;
@@ -431,7 +428,6 @@
             document.getElementById('report-sales').innerText = "Rs. " + totalSalesRevenue.toFixed(2);
             document.getElementById('report-expense').innerText = "Rs. " + totalPurchaseExpense.toFixed(2);
 
-            // Sync Dropdown POS Menu
             const posDropdown = document.getElementById('pos-med-select');
             posDropdown.innerHTML = '';
             medicineDatabase.forEach(med => {
@@ -441,26 +437,22 @@
                 posDropdown.appendChild(op);
             });
 
-            // Sync Supplementary Module Tables
             renderModuleTables();
         }
 
         function renderModuleTables() {
-            // Render Purchases
             const pTable = document.getElementById('purchases-table-body');
             pTable.innerHTML = '';
             purchasesData.forEach(p => {
                 pTable.innerHTML += `<tr><td>${p.supplier}</td><td>${p.item}</td><td>Rs. ${p.total}</td></tr>`;
             });
 
-            // Render Customers
             const cTable = document.getElementById('customers-table-body');
             cTable.innerHTML = '';
             customersData.forEach(c => {
                 cTable.innerHTML += `<tr><td><b>${c.name}</b></td><td>${c.phone}</td><td>Rs. ${c.balance}</td></tr>`;
             });
 
-            // Render Suppliers
             const sTable = document.getElementById('suppliers-table-body');
             sTable.innerHTML = '';
             suppliersData.forEach(s => {
@@ -495,6 +487,7 @@
         document.getElementById('add-to-cart-btn').addEventListener('click', () => {
             const id = parseInt(document.getElementById('pos-med-select').value);
             const qty = parseInt(document.getElementById('pos-med-qty').value);
+            if(!id) { alert("Pehle inventory main medicine add karein!"); return; }
             const item = medicineDatabase.find(m => m.id === id);
             
             if(!item || qty > item.qty) { alert("Stock limit exceeded!"); return; }
@@ -532,7 +525,7 @@
             alert("Invoice generated and stock updated successfully!");
         });
 
-        // DYNAMIC DATA INJECTOR FOR OTHER FORMS
+        // FORMS DATA HANDLING
         document.getElementById('purchase-form').addEventListener('submit', (e) => {
             e.preventDefault();
             let val = parseFloat(document.getElementById('p-total').value);
@@ -556,7 +549,7 @@
             updateSystemUI();
         });
 
-        // PASSWORD CHANGE LISTENER
+        // FIXED PASSWORD CHANGE ACTION
         document.getElementById('change-password-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const newPass = document.getElementById('new-sys-password').value.trim();
@@ -566,7 +559,7 @@
             }
             currentAdminPassword = newPass; 
             document.getElementById('change-password-form').reset();
-            alert("Success! Admin password successfully updated. Agli dafa se yeh naya password chalega.");
+            alert("Success! Admin password successfully updated. Ab aap logout karke check kar sakte hain.");
         });
 
     </script>
