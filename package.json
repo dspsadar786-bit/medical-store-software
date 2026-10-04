@@ -1,0 +1,34 @@
+{
+  "name": "the-medicine-point",
+  "version": "1.0.0",
+  "description": "The Medicine Point - Offline Medical Store Management System",
+  "main": "main.js",
+  "author": "The Medicine Point",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "sql.js": "^1.13.0"
+  },
+  "devDependencies": {
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.themedicinepoint.app",
+    "productName": "The Medicine Point",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!dist/**",
+      "!*.db"
+    ],
+    "win": {
+      "target": "nsis"
+    }
+  }
+}
